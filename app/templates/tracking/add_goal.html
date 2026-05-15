@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Add Goal - {{ addiction.name }} - Recovery Path{% endblock %}
+
+{% block content %}
+<section class="add-goal-section">
+    <div class="form-header">
+        <a href="{{ url_for('tracking.goals', slug=addiction.slug) }}" class="back-link">← Back to Goals</a>
+        <h1>Add {{ addiction.name }} Goal</h1>
+        <p>Set a clear, achievable goal to help guide your recovery journey.</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('tracking.add_goal', slug=addiction.slug) }}" class="goal-form">
+        <div class="form-group">
+            <label for="title">Goal Title *</label>
+            <input type="text" id="title" name="title" placeholder="e.g., Stay sober for 30 days" value="{{ request.form.title }}" required>
+            <small>Keep it concise and specific</small>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Goal Description *</label>
+            <textarea id="description" name="description" rows="3" placeholder="Describe what you want to achieve and why it's important..." required>{{ request.form.description }}</textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="target_date">Target Date (optional)</label>
+                <input type="date" id="target_date" name="target_date" value="{{ request.form.target_date }}">
+                <small>When do you plan to achieve this goal?</small>
+            </div>
+
+            <div class="form-group">
+                <label for="goal_type">Goal Type</label>
+                <select id="goal_type" name="goal_type">
+                    <option value="abstinence" {% if request.form.goal_type == 'abstinence' %}selected{% endif %}>Abstinence - Stay clean/sober</option>
+                    <option value="reduction" {% if request.form.goal_type == 'reduction' %}selected{% endif %}>Reduction - Cut down usage</option>
+                    <option value="behavioral" {% if request.form.goal_type == 'behavioral' %}selected{% endif %}>Behavioral - Change habits</option>
+                    <option value="milestone" {% if request.form.goal_type == 'milestone' %}selected{% endif %}>Milestone - Achieve specific accomplishment</option>
+                    <option value="maintenance" {% if request.form.goal_type == 'maintenance' %}selected{% endif %}>Maintenance - Sustain progress</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="progress_notes">Initial Progress Notes (optional)</label>
+            <textarea id="progress_notes" name="progress_notes" rows="2" placeholder="Any initial thoughts or steps you're planning to take...">{{ request.form.progress_notes }}</textarea>
+        </div>
+
+        <div class="goal-examples">
+            <h3>Goal Examples</h3>
+            <div class="examples-grid">
+                <div class="example-card">
+                    <h4>Short-term Goal</h4>
+                    <p>"Go 7 days without smoking"</p>
+                </div>
+                <div class="example-card">
+                    <h4>Long-term Goal</h4>
+                    <p>"Achieve 6 months of sobriety"</p>
+                </div>
+                <div class="example-card">
+                    <h4>Behavioral Goal</h4>
+                    <p>"Replace smoking breaks with 10-minute walks"</p>
+                </div>
+                <div class="example-card">
+                    <h4>Milestone Goal</h4>
+                    <p>"Complete a 5K run without stopping"</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-lg">Create Goal</button>
+            <a href="{{ url_for('tracking.goals', slug=addiction.slug) }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+
+    <div class="goal-tips">
+        <h3>SMART Goals for Recovery</h3>
+        <ul>
+            <li><strong>Specific:</strong> Clearly define what you want to achieve</li>
+            <li><strong>Measurable:</strong> Include criteria for tracking progress</li>
+            <li><strong>Achievable:</strong> Set realistic goals you can actually reach</li>
+            <li><strong>Relevant:</strong> Goals should matter to your recovery</li>
+            <li><strong>Time-bound:</strong> Set a timeframe for completion</li>
+        </ul>
+    </div>
+</section>
+{% endblock %}

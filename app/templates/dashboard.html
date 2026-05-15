@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Recovery Path{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Your Dashboard</h1>
+    <p>Past questionnaire results and recommendations.</p>
+</section>
+
+{% if responses %}
+<section class="dashboard-list">
+    {% for r in responses %}
+        <a href="{{ url_for('questionnaire.results', slug=r.questionnaire.addiction.slug) }}" class="dashboard-card">
+            <span class="addiction-category">{{ r.questionnaire.addiction.category }}</span>
+            <h3>{{ r.questionnaire.addiction.name }}</h3>
+            <div class="dashboard-meta">
+                <span class="severity severity-{{ r.severity_level }}">{{ r.severity_level|capitalize }}</span>
+                <span class="date">{{ r.created_at.strftime('%b %d, %Y') }}</span>
+            </div>
+        </a>
+    {% endfor %}
+</section>
+{% else %}
+<section class="empty-dashboard">
+    <p>You haven't completed any questionnaires yet.</p>
+    <a href="{{ url_for('addictions.list_addictions') }}" class="btn btn-primary">Explore Topics</a>
+</section>
+{% endif %}
+{% endblock %}

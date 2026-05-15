@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}My Recovery Dashboard - Recovery Path{% endblock %}
+
+{% block content %}
+<section class="dashboard-section">
+    <div class="dashboard-header">
+        <h1>My Recovery Dashboard</h1>
+        <p>Track your progress, manage goals, and stay committed to your recovery journey.</p>
+    </div>
+
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <div class="stat-number">{{ total_entries }}</div>
+            <div class="stat-label">Tracking Entries</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ completed_goals }}</div>
+            <div class="stat-label">Completed Goals</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ active_goals|length }}</div>
+            <div class="stat-label">Active Goals</div>
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="dashboard-section">
+            <h2>Active Goals</h2>
+            {% if active_goals %}
+                <div class="goals-list">
+                    {% for goal in active_goals %}
+                        <div class="goal-card {% if goal.is_completed %}completed{% endif %}">
+                            <div class="goal-header">
+                                <h3>{{ goal.title }}</h3>
+                                <span class="goal-type">{{ goal.goal_type|title }}</span>
+                            </div>
+                            <div class="goal-content">
+                                <p>{{ goal.description or "No description" }}</p>
+                                {% if goal.target_value %}
+                                    <p><strong>Target:</strong> {{ goal.target_value }}</p>
+                                {% endif %}
+                                {% if goal.target_date %}
+                                    <p><strong>Due:</strong> {{ goal.target_date.strftime('%B %d, %Y') }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="goal-actions">
+                                <a href="{{ url_for('tracking.goals', slug=goal.addiction.slug) }}" class="btn btn-sm">Manage</a>
+                                <a href="{{ url_for('tracking.addiction_calendar', slug=goal.addiction.slug) }}" class="btn btn-sm btn-secondary">Track</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>You haven't set any goals yet.</p>
+                    <a href="{{ url_for('addictions.list_addictions') }}" class="btn btn-primary">Browse Addictions</a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="dashboard-section">
+            <h2>Recent Activity (Last 7 Days)</h2>
+            {% if recent_entries %}
+                <div class="entries-list">
+                    {% for entry in recent_entries %}
+                        <div class="entry-card entry-{{ entry.entry_type }}">
+                            <div class="entry-header">
+                                <span class="entry-date">{{ entry.entry_date.strftime('%b %d') }}</span>
+                                <span class="entry-type">{{ entry.entry_type|title }}</span>
+                                <span class="entry-addiction">{{ entry.addiction.name }}</span>
+                            </div>
+                            <div class="entry-content">
+                                {% if entry.description %}
+                                    <p>{{ entry.description }}</p>
+                                {% endif %}
+                                {% if entry.quantity %}
+                                    <p><strong>Amount:</strong> {{ entry.quantity }}</p>
+                                {% endif %}
+                                <div class="severity-indicator">
+                                    <span>Severity: </span>
+                                    {% for i in range(5) %}
+                                        <span class="severity-dot {% if i < entry.severity %}active{% endif %}"></span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="entry-actions">
+                                <a href="{{ url_for('tracking.edit_entry', entry_id=entry.id) }}" class="btn btn-xs">Edit</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>No recent activity. Start tracking your progress!</p>
+                    <a href="{{ url_for('addictions.list_addictions') }}" class="btn btn-primary">Start Tracking</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="dashboard-actions">
+        <h2>Quick Actions</h2>
+        <div class="action-buttons">
+            <a href="{{ url_for('addictions.list_addictions') }}" class="btn btn-primary">Browse All Addictions</a>
+            <a href="{{ url_for('questionnaire.start', slug='alcohol') }}" class="btn btn-secondary">Take Assessment</a>
+            <a href="{{ url_for('addictions.stories', slug='alcohol') }}" class="btn btn-secondary">Read Stories</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

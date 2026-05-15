@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Questionnaire: {{ addiction.name }} - Recovery Path{% endblock %}
+
+{% block content %}
+<section class="questionnaire-section">
+    <a href="{{ url_for('addictions.detail', slug=addiction.slug) }}" class="back-link">← Back to {{ addiction.name }}</a>
+    <h1>{{ addiction.name }} — Questionnaire</h1>
+    <p>Rate each statement from 1 (rarely/never) to 5 (very often/always). Be honest for the most accurate results.</p>
+
+    <form method="POST" action="{{ url_for('questionnaire.start', slug=addiction.slug) }}" id="questionnaire-form" class="questionnaire-form">
+        {% for q in questions %}
+            <div class="question-block">
+                <label for="q_{{ q.id }}">{{ q.text }}</label>
+                <div class="scale-options">
+                    {% for i in range(1, 6) %}
+                        <label class="scale-option">
+                            <input type="radio" name="q_{{ q.id }}" value="{{ i }}" required>
+                            <span>{{ i }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary btn-lg">Get Results</button>
+    </form>
+</section>
+{% endblock %}

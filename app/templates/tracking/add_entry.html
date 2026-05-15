@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Add Tracking Entry - {{ addiction.name }} - Recovery Path{% endblock %}
+
+{% block content %}
+<section class="add-entry-section">
+    <div class="form-header">
+        <a href="{{ url_for('tracking.addiction_calendar', slug=addiction.slug) }}" class="back-link">← Back to Calendar</a>
+        <h1>Add {{ addiction.name }} Entry</h1>
+        <p>Record your experience to track your progress and identify patterns.</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('tracking.add_entry', slug=addiction.slug) }}" class="tracking-form">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="entry_date">Date *</label>
+                <input type="date" id="entry_date" name="entry_date" value="{{ request.form.entry_date or (date.today().isoformat() if date else '') }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="entry_type">Entry Type *</label>
+                <select id="entry_type" name="entry_type" required>
+                    <option value="">Select type...</option>
+                    <option value="relapse" {% if request.form.entry_type == 'relapse' %}selected{% endif %}>Relapse - Engaged in addictive behavior</option>
+                    <option value="trigger" {% if request.form.entry_type == 'trigger' %}selected{% endif %}>Trigger - Experienced strong urge/cravings</option>
+                    <option value="progress" {% if request.form.entry_type == 'progress' %}selected{% endif %}>Progress - Made positive changes</option>
+                    <option value="milestone" {% if request.form.entry_type == 'milestone' %}selected{% endif %}>Milestone - Achieved significant goal</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="description">What happened? *</label>
+            <textarea id="description" name="description" rows="3" placeholder="Describe the situation, your feelings, or what occurred..." required>{{ request.form.description }}</textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="quantity">Amount/Quantity (optional)</label>
+                <input type="text" id="quantity" name="quantity" placeholder="e.g., 2 drinks, 3 hours, 1 cigarette" value="{{ request.form.quantity }}">
+                <small>How much did you consume or how long did it last?</small>
+            </div>
+
+            <div class="form-group">
+                <label for="severity">Severity (1-5)</label>
+                <div class="severity-selector">
+                    {% for i in range(1, 6) %}
+                        <label class="severity-option">
+                            <input type="radio" name="severity" value="{{ i }}" {% if (request.form.severity|int if request.form.severity else 1) == i %}checked{% endif %}>
+                            <span>{{ i }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
+                <small>1 = Minor incident, 5 = Major setback</small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="notes">Additional Notes (optional)</label>
+            <textarea id="notes" name="notes" rows="3" placeholder="Any additional thoughts, triggers identified, or lessons learned...">{{ request.form.notes }}</textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-lg">Save Entry</button>
+            <a href="{{ url_for('tracking.addiction_calendar', slug=addiction.slug) }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+
+    <div class="entry-tips">
+        <h3>Tips for Effective Tracking</h3>
+        <ul>
+            <li><strong>Be honest:</strong> Accurate tracking helps identify patterns and triggers</li>
+            <li><strong>Record promptly:</strong> Note entries as soon as possible after they occur</li>
+            <li><strong>Include context:</strong> What led to this? How were you feeling?</li>
+            <li><strong>Celebrate progress:</strong> Don't forget to log positive changes and milestones</li>
+        </ul>
+    </div>
+</section>
+{% endblock %}

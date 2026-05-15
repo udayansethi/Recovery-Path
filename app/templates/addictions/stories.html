@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Stories - {{ addiction.name }} - Recovery Path{% endblock %}
+
+{% block content %}
+<section class="stories-section">
+    <a href="{{ url_for('addictions.detail', slug=addiction.slug) }}" class="back-link">← Back to {{ addiction.name }}</a>
+
+    <div class="stories-header">
+        <span class="addiction-category">{{ addiction.category }}</span>
+        <h1>{{ addiction.name }} — Community Stories</h1>
+        <p>Real experiences from people who have faced similar challenges. Your story matters too.</p>
+
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('addictions.add_story', slug=addiction.slug) }}" class="btn btn-primary">Share Your Story</a>
+        {% endif %}
+    </div>
+
+    <div class="stories-list">
+        {% for story in stories.items %}
+            <div class="story-card">
+                <div class="story-header">
+                    <h3>{{ story.title }}</h3>
+                    <div class="story-meta">
+                        <span class="author">By {{ story.author_name }}</span>
+                        <span class="date">{{ story.created_at.strftime('%B %d, %Y') }}</span>
+                    </div>
+                </div>
+                <div class="story-content">
+                    <p>{{ story.content }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if stories.pages > 1 %}
+        <div class="pagination">
+            {% if stories.has_prev %}
+                <a href="{{ url_for('addictions.stories', slug=addiction.slug, page=stories.prev_num) }}" class="btn btn-secondary">Previous</a>
+            {% endif %}
+
+            <span class="page-info">Page {{ stories.page }} of {{ stories.pages }}</span>
+
+            {% if stories.has_next %}
+                <a href="{{ url_for('addictions.stories', slug=addiction.slug, page=stories.next_num) }}" class="btn btn-secondary">Next</a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% if not stories.items %}
+        <div class="no-stories">
+            <p>No stories have been shared yet. Be the first to share your experience!</p>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('addictions.add_story', slug=addiction.slug) }}" class="btn btn-primary">Share Your Story</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

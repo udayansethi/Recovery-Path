@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}{{ addiction.name }} - Recovery Path{% endblock %}
+
+{% block content %}
+<section class="addiction-detail">
+    <a href="{{ url_for('addictions.list_addictions') }}" class="back-link">← Back to topics</a>
+    <div class="detail-header">
+        <span class="addiction-category">{{ addiction.category }}</span>
+        <h1>{{ addiction.name }}</h1>
+        <p class="addiction-desc">{{ addiction.description }}</p>
+    </div>
+    {% if current_user.is_authenticated %}
+        <div class="detail-actions">
+            <a href="{{ url_for('questionnaire.start', slug=addiction.slug) }}" class="btn btn-primary btn-lg">Start Questionnaire</a>
+            <a href="{{ url_for('tracking.addiction_calendar', slug=addiction.slug) }}" class="btn btn-outline btn-lg">Track Progress</a>
+            <a href="{{ url_for('tracking.goals', slug=addiction.slug) }}" class="btn btn-outline btn-lg">Set Goals</a>
+        </div>
+    {% else %}
+        <p>Please <a href="{{ url_for('auth.login') }}">log in</a> or <a href="{{ url_for('auth.register') }}">create an account</a> to take the questionnaire and track your progress.</p>
+    {% endif %}
+
+    <div class="stories-section">
+        <h2>Community Stories & Experiences</h2>
+        <p>Read stories from others who have faced similar challenges, or <a href="{{ url_for('addictions.stories', slug=addiction.slug) }}">view all stories</a>.</p>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('addictions.add_story', slug=addiction.slug) }}" class="btn btn-secondary">Share Your Story</a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

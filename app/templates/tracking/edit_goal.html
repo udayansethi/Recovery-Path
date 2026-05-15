@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Goal - {{ addiction.name }} - Recovery Path{% endblock %}
+
+{% block content %}
+<section class="edit-goal-section">
+    <div class="form-header">
+        <a href="{{ url_for('tracking.goals', slug=addiction.slug) }}" class="back-link">← Back to Goals</a>
+        <h1>Edit {{ addiction.name }} Goal</h1>
+        <p>Update your goal details and track your progress.</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('tracking.edit_goal', goal_id=goal.id) }}" class="goal-form">
+        <div class="form-group">
+            <label for="title">Goal Title *</label>
+            <input type="text" id="title" name="title" placeholder="e.g., Stay sober for 30 days" value="{{ request.form.title or goal.title }}" required>
+            <small>Keep it concise and specific</small>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Goal Description *</label>
+            <textarea id="description" name="description" rows="3" placeholder="Describe what you want to achieve and why it's important..." required>{{ request.form.description or goal.description }}</textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="target_date">Target Date (optional)</label>
+                <input type="date" id="target_date" name="target_date" value="{{ request.form.target_date or (goal.target_date.isoformat() if goal.target_date else '') }}">
+                <small>When do you plan to achieve this goal?</small>
+            </div>
+
+            <div class="form-group">
+                <label for="goal_type">Goal Type</label>
+                <select id="goal_type" name="goal_type">
+                    <option value="abstinence" {% if (request.form.goal_type or goal.goal_type) == 'abstinence' %}selected{% endif %}>Abstinence - Stay clean/sober</option>
+                    <option value="reduction" {% if (request.form.goal_type or goal.goal_type) == 'reduction' %}selected{% endif %}>Reduction - Cut down usage</option>
+                    <option value="behavioral" {% if (request.form.goal_type or goal.goal_type) == 'behavioral' %}selected{% endif %}>Behavioral - Change habits</option>
+                    <option value="milestone" {% if (request.form.goal_type or goal.goal_type) == 'milestone' %}selected{% endif %}>Milestone - Achieve specific accomplishment</option>
+                    <option value="maintenance" {% if (request.form.goal_type or goal.goal_type) == 'maintenance' %}selected{% endif %}>Maintenance - Sustain progress</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="progress_notes">Progress Notes</label>
+            <textarea id="progress_notes" name="progress_notes" rows="3" placeholder="Update your progress, challenges faced, or next steps...">{{ request.form.progress_notes or goal.progress_notes }}</textarea>
+        </div>
+
+        <div class="goal-status-section">
+            <h3>Goal Status</h3>
+            <div class="status-options">
+                <label class="status-option">
+                    <input type="radio" name="is_completed" value="false" {% if not (request.form.is_completed == 'true' or goal.is_completed) %}checked{% endif %}>
+                    <span class="status-label active">In Progress</span>
+                </label>
+                <label class="status-option">
+                    <input type="radio" name="is_completed" value="true" {% if request.form.is_completed == 'true' or goal.is_completed %}checked{% endif %}>
+                    <span class="status-label completed">Completed</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="goal-history">
+            <h3>Goal History</h3>
+            <div class="history-meta">
+                <p><strong>Created:</strong> {{ goal.created_at.strftime('%B %d, %Y at %I:%M %p') }}</p>
+                {% if goal.completed_at %}
+                    <p><strong>Completed:</strong> {{ goal.completed_at.strftime('%B %d, %Y at %I:%M %p') }}</p>
+                {% endif %}
+                <p><strong>Last Updated:</strong> {{ goal.updated_at.strftime('%B %d, %Y at %I:%M %p') }}</p>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-lg">Update Goal</button>
+            <a href="{{ url_for('tracking.goals', slug=addiction.slug) }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ url_for('tracking.delete_goal', goal_id=goal.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this goal?')">Delete Goal</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Share Your Story - {{ addiction.name }} - Recovery Path{% endblock %}
+
+{% block content %}
+<section class="add-story-section">
+    <a href="{{ url_for('addictions.stories', slug=addiction.slug) }}" class="back-link">← Back to Stories</a>
+
+    <div class="add-story-header">
+        <span class="addiction-category">{{ addiction.category }}</span>
+        <h1>Share Your {{ addiction.name }} Story</h1>
+        <p>Your experience can help others feel less alone. Share as much or as little as you're comfortable with.</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('addictions.add_story', slug=addiction.slug) }}" class="story-form">
+        <div class="form-group">
+            <label for="title">Story Title</label>
+            <input type="text" id="title" name="title" required maxlength="200" placeholder="Give your story a title...">
+        </div>
+
+        <div class="form-group">
+            <label for="content">Your Story</label>
+            <textarea id="content" name="content" required rows="10" placeholder="Share your experience, challenges, progress, or advice..."></textarea>
+        </div>
+
+        <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+                <input type="checkbox" name="anonymous" id="anonymous">
+                <span class="checkmark"></span>
+                Post anonymously (your name won't be shown)
+            </label>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-lg">Share My Story</button>
+            <a href="{{ url_for('addictions.stories', slug=addiction.slug) }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+
+    <div class="story-guidelines">
+        <h3>Sharing Guidelines</h3>
+        <ul>
+            <li>Be respectful and supportive of others</li>
+            <li>Focus on your personal experience and recovery journey</li>
+            <li>Avoid giving medical advice</li>
+            <li>Remember that this is a safe space for sharing</li>
+        </ul>
+    </div>
+</section>
+{% endblock %}

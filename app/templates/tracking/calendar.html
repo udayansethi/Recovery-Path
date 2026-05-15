@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}{{ addiction.name }} Tracking Calendar - Recovery Path{% endblock %}
+
+{% block content %}
+<section class="calendar-section">
+    <div class="calendar-header">
+        <a href="{{ url_for('tracking.dashboard') }}" class="back-link">← Back to Dashboard</a>
+        <div class="calendar-title">
+            <span class="addiction-category">{{ addiction.category }}</span>
+            <h1>{{ addiction.name }} — Tracking Calendar</h1>
+        </div>
+        <div class="calendar-actions">
+            <a href="{{ url_for('tracking.add_entry', slug=addiction.slug) }}" class="btn btn-primary">Add Entry</a>
+            <a href="{{ url_for('tracking.goals', slug=addiction.slug) }}" class="btn btn-secondary">Manage Goals</a>
+        </div>
+    </div>
+
+    <!-- Month Navigation -->
+    <div class="calendar-navigation">
+        <a href="{{ url_for('tracking.addiction_calendar', slug=addiction.slug, year=year, month=month-1 if month > 1 else 12, **({'year': year-1} if month == 1 else {})) }}" class="nav-btn">‹ Previous</a>
+        <h2>{{ month_name }} {{ year }}</h2>
+        <a href="{{ url_for('tracking.addiction_calendar', slug=addiction.slug, year=year, month=month+1 if month < 12 else 1, **({'year': year+1} if month == 12 else {})) }}" class="nav-btn">Next ›</a>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div class="calendar-grid">
+        <!-- Day headers -->
+        {% for day in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] %}
+            <div class="calendar-day-header">{{ day }}</div>
+        {% endfor %}
+
+        <!-- Calendar cells -->
+        {% for week in calendar %}
+            {% for day in week %}
+                {% if day == 0 %}
+                    <div class="calendar-day empty"></div>
+                {% else %}
+                    <div class="calendar-day {% if entry_dates.get(day) %}has-entry entry-{{ entry_dates.get(day).entry_type }}{% endif %}">
+                        <div class="day-number">{{ day }}</div>
+                        {% if entry_dates.get(day) %}
+                            <div class="day-entries">
+                                <div class="entry-indicator" title="{{ entry_dates.get(day).entry_type|title }}: {{ entry_dates.get(day).description or 'No description' }}">
+                                    {% if entry_dates.get(day).entry_type == 'relapse' %}
+                                        ⚠️
+                                    {% elif entry_dates.get(day).entry_type == 'trigger' %}
+                                        🚨
+                                    {% elif entry_dates.get(day).entry_type == 'progress' %}
+                                        ✅
+                                    {% elif entry_dates.get(day).entry_type == 'milestone' %}
+                                        🎯
+                                    {% endif %}
+                                </div>
+                                {% if entry_dates.get(day).quantity %}
+                                    <div class="entry-quantity">{{ entry_dates.get(day).quantity }}</div>
+                                {% endif %}
+                            </div>
+                            <a href="{{ url_for('tracking.edit_entry', entry_id=entry_dates.get(day).id) }}" class="day-link" title="Edit entry"></a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+    <!-- Legend -->
+    <div class="calendar-legend">
+        <h3>Entry Types</h3>
+        <div class="legend-items">
+            <div class="legend-item">
+                <span class="legend-color relapse"></span>
+                <span>Relapse</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color trigger"></span>
+                <span>Trigger</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color progress"></span>
+                <span>Progress</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color milestone"></span>
+                <span>Milestone</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Goals -->
+    {% if goals %}
+        <div class="active-goals">
+            <h3>Active Goals for {{ addiction.name }}</h3>
+            <div class="goals-summary">
+                {% for goal in goals %}
+                    <div class="goal-summary">
+                        <h4>{{ goal.title }}</h4>
+                        <p>{{ goal.description or "No description" }}</p>
+                        {% if goal.target_value %}
+                            <p><strong>Target:</strong> {{ goal.target_value }}</p>
+                        {% endif %}
+                        {% if goal.target_date %}
+                            <p><strong>Due:</strong> {{ goal.target_date.strftime('%B %d, %Y') }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Quick Stats -->
+    <div class="calendar-stats">
+        <h3>This Month's Activity</h3>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-value">{{ entry_dates|length }}</span>
+                <span class="stat-label">Days with entries</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">{{ entry_dates.values()|selectattr('entry_type', 'equalto', 'relapse')|list|length }}</span>
+                <span class="stat-label">Relapse days</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">{{ entry_dates.values()|selectattr('entry_type', 'equalto', 'progress')|list|length }}</span>
+                <span class="stat-label">Progress days</span>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

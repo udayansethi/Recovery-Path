@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Results: {{ addiction.name }} - Recovery Path{% endblock %}
+
+{% block content %}
+<section class="results-section">
+    <a href="{{ url_for('addictions.detail', slug=addiction.slug) }}" class="back-link">← Back to {{ addiction.name }}</a>
+    <h1>Your Results: {{ addiction.name }}</h1>
+
+    <div class="results-summary">
+        <div class="score-badge severity-{{ severity.level }}">
+            <span class="score-label">Score</span>
+            <span class="score-value">{{ total_score }}</span>
+            <span class="severity-label">{{ severity.level|capitalize }}</span>
+        </div>
+    </div>
+
+    <div class="results-content">
+        <h2>Personalized Tips</h2>
+        <ul class="tips-list">
+            {% for tip in severity.tips %}
+                <li>{{ tip }}</li>
+            {% endfor %}
+        </ul>
+
+        <div class="professional-note">
+            <strong>Professional Support</strong>
+            <p>{{ severity.professional }}</p>
+        </div>
+    </div>
+
+    <div class="results-actions">
+        <a href="{{ url_for('addictions.list_addictions') }}" class="btn btn-outline">Explore Other Topics</a>
+        <a href="{{ url_for('addictions.detail', slug=addiction.slug) }}" class="btn btn-primary">Back to {{ addiction.name }}</a>
+    </div>
+</section>
+{% endblock %}

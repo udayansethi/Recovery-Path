@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Goals - {{ addiction.name }} - Recovery Path{% endblock %}
+
+{% block content %}
+<section class="goals-section">
+    <div class="goals-header">
+        <a href="{{ url_for('tracking.addiction_calendar', slug=addiction.slug) }}" class="back-link">← Back to Calendar</a>
+        <h1>{{ addiction.name }} Goals</h1>
+        <p>Set and track your recovery goals to stay motivated and focused.</p>
+    </div>
+
+    <div class="goals-actions">
+        <a href="{{ url_for('tracking.add_goal', slug=addiction.slug) }}" class="btn btn-primary">+ Add New Goal</a>
+    </div>
+
+    <div class="goals-grid">
+        {% if goals %}
+            {% for goal in goals %}
+            <div class="goal-card {% if goal.is_completed %}completed{% endif %}">
+                <div class="goal-header">
+                    <h3>{{ goal.title }}</h3>
+                    <div class="goal-status">
+                        {% if goal.is_completed %}
+                            <span class="status completed">✓ Completed</span>
+                        {% else %}
+                            <span class="status active">In Progress</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="goal-description">
+                    <p>{{ goal.description }}</p>
+                </div>
+
+                <div class="goal-meta">
+                    <div class="goal-dates">
+                        <span class="created-date">Set: {{ goal.created_at.strftime('%b %d, %Y') }}</span>
+                        {% if goal.target_date %}
+                            <span class="target-date">Target: {{ goal.target_date.strftime('%b %d, %Y') }}</span>
+                        {% endif %}
+                        {% if goal.completed_at %}
+                            <span class="completed-date">Completed: {{ goal.completed_at.strftime('%b %d, %Y') }}</span>
+                        {% endif %}
+                    </div>
+
+                    {% if goal.progress_notes %}
+                    <div class="goal-progress">
+                        <strong>Progress:</strong> {{ goal.progress_notes }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="goal-actions">
+                    {% if not goal.is_completed %}
+                        <a href="{{ url_for('tracking.edit_goal', goal_id=goal.id) }}" class="btn btn-sm btn-outline">Edit</a>
+                        <a href="{{ url_for('tracking.complete_goal', goal_id=goal.id) }}" class="btn btn-sm btn-success" onclick="return confirm('Mark this goal as completed?')">Complete</a>
+                    {% endif %}
+                    <a href="{{ url_for('tracking.delete_goal', goal_id=goal.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Delete this goal?')">Delete</a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-goals">
+                <h3>No goals set yet</h3>
+                <p>Goals help you stay focused and motivated on your recovery journey. Start by setting your first goal!</p>
+                <a href="{{ url_for('tracking.add_goal', slug=addiction.slug) }}" class="btn btn-primary">Set Your First Goal</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="goals-stats">
+        <h3>Goal Statistics</h3>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">{{ goals|length }}</div>
+                <div class="stat-label">Total Goals</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ completed_goals|length }}</div>
+                <div class="stat-label">Completed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ active_goals|length }}</div>
+                <div class="stat-label">Active</div>
+            </div>
+            {% if goals %}
+            <div class="stat-card">
+                <div class="stat-number">{{ "%.1f"|format(completion_rate) }}%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="goal-tips">
+        <h3>Goal Setting Tips</h3>
+        <div class="tips-grid">
+            <div class="tip-card">
+                <h4>Be Specific</h4>
+                <p>Instead of "stop drinking," try "go 30 days without alcohol"</p>
+            </div>
+            <div class="tip-card">
+                <h4>Set Realistic Goals</h4>
+                <p>Start small and build up. Small wins build momentum.</p>
+            </div>
+            <div class="tip-card">
+                <h4>Track Progress</h4>
+                <p>Regularly update your goals with progress notes.</p>
+            </div>
+            <div class="tip-card">
+                <h4>Celebrate Success</h4>
+                <p>Acknowledge and reward yourself for completing goals.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

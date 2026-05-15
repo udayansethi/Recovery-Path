@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Explore Topics - Recovery Path{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Explore Topics</h1>
+    <p>Select a topic to learn more and take the questionnaire for personalized guidance.</p>
+</section>
+
+<section class="search-section">
+    <form method="GET" action="{{ url_for('addictions.list_addictions') }}" class="search-form">
+        <input type="text" name="search" value="{{ search_query or '' }}" placeholder="Search topics..." class="search-input">
+        <select name="category" class="category-select">
+            <option value="">All categories</option>
+            {% for cat in categories %}
+                <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+</section>
+
+<section class="addictions-grid">
+    {% for addiction in addictions %}
+        <a href="{{ url_for('addictions.detail', slug=addiction.slug) }}" class="addiction-card">
+            <div class="addiction-icon">{{ addiction.icon }}</div>
+            <span class="addiction-category">{{ addiction.category }}</span>
+            <h3>{{ addiction.name }}</h3>
+            <p>{{ addiction.description[:120] }}{% if addiction.description|length > 120 %}...{% endif %}</p>
+            <span class="card-link">Take questionnaire →</span>
+        </a>
+    {% else %}
+        <p class="empty-state">No topics match your search. Try different keywords or categories.</p>
+    {% endfor %}
+</section>
+{% endblock %}
