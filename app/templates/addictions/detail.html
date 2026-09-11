@@ -3,29 +3,55 @@
 {% block title %}{{ addiction.name }} - Recovery Path{% endblock %}
 
 {% block content %}
-<section class="addiction-detail">
-    <a href="{{ url_for('addictions.list_addictions') }}" class="back-link">← Back to topics</a>
-    <div class="detail-header">
-        <span class="addiction-category">{{ addiction.category }}</span>
-        <h1>{{ addiction.name }}</h1>
-        <p class="addiction-desc">{{ addiction.description }}</p>
-    </div>
-    {% if current_user.is_authenticated %}
-        <div class="detail-actions">
-            <a href="{{ url_for('questionnaire.start', slug=addiction.slug) }}" class="btn btn-primary btn-lg">Start Questionnaire</a>
-            <a href="{{ url_for('tracking.addiction_calendar', slug=addiction.slug) }}" class="btn btn-outline btn-lg">Track Progress</a>
-            <a href="{{ url_for('tracking.goals', slug=addiction.slug) }}" class="btn btn-outline btn-lg">Set Goals</a>
-        </div>
-    {% else %}
-        <p>Please <a href="{{ url_for('auth.login') }}">log in</a> or <a href="{{ url_for('auth.register') }}">create an account</a> to take the questionnaire and track your progress.</p>
-    {% endif %}
+<a href="{{ url_for('addictions.list_addictions') }}" class="plainlink" style="display:inline-block;font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);transition:transform .25s cubic-bezier(.16,1,.3,1);margin-bottom:var(--space-6)">← Back to topics</a>
 
-    <div class="stories-section">
-        <h2>Community Stories & Experiences</h2>
-        <p>Read stories from others who have faced similar challenges, or <a href="{{ url_for('addictions.stories', slug=addiction.slug) }}">view all stories</a>.</p>
+<section style="display:grid;grid-template-columns:1.4fr 1fr;gap:var(--space-8);align-items:start;border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-8);animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+    <div>
+        <span class="tag tag-accent">{{ addiction.category }}</span>
+        <h1 style="margin:var(--space-3) 0 var(--space-4);font-size:52px">{{ addiction.name }}</h1>
+        <p style="font-size:17px;max-width:54ch;color:color-mix(in srgb, var(--color-text) 78%, transparent)">{{ addiction.description }}</p>
         {% if current_user.is_authenticated %}
-            <a href="{{ url_for('addictions.add_story', slug=addiction.slug) }}" class="btn btn-secondary">Share Your Story</a>
+            <div style="display:flex;gap:var(--space-3);flex-wrap:wrap;margin-top:var(--space-6)">
+                <a href="{{ url_for('questionnaire.start', slug=addiction.slug) }}" class="btn btn-primary blueprint ha" style="padding:var(--space-3) var(--space-6);font-size:15px">
+                    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                    Start Questionnaire
+                </a>
+                <a href="{{ url_for('tracking.addiction_calendar', slug=addiction.slug) }}" class="btn btn-secondary hp" style="padding:var(--space-3) var(--space-6);font-size:15px">Track Progress</a>
+                <a href="{{ url_for('tracking.goals', slug=addiction.slug) }}" class="btn btn-secondary hp" style="padding:var(--space-3) var(--space-6);font-size:15px">Set Goals</a>
+            </div>
+        {% else %}
+            <p style="margin-top:var(--space-6);font-size:15px">Please <a href="{{ url_for('auth.login') }}" style="cursor:pointer">log in</a> or <a href="{{ url_for('auth.register') }}" style="cursor:pointer">create an account</a> to take the questionnaire and track your progress.</p>
         {% endif %}
+    </div>
+    <div class="blueprint" style="padding:var(--space-6);transition:transform .35s cubic-bezier(.16,1,.3,1)">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="eyebrow klein">Topic sheet</div>
+        <div style="display:grid;gap:var(--space-3);font-size:14px">
+            <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-2)"><span>Reference</span><span style="font-family:var(--font-heading)">{{ addiction.slug|upper }}</span></div>
+            <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-2)"><span>Category</span><span style="font-family:var(--font-heading)">{{ addiction.category }}</span></div>
+            <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-2)"><span>Questions</span><span style="font-family:var(--font-heading)">{{ addiction.questionnaire.questions|length if addiction.questionnaire else 10 }}</span></div>
+            <div style="display:flex;justify-content:space-between"><span>Community stories</span><span style="font-family:var(--font-heading)">{{ addiction.stories.count() }}</span></div>
+        </div>
+    </div>
+</section>
+
+<section style="padding-top:var(--space-8);display:grid;grid-template-columns:1.4fr 1fr;gap:var(--space-8);align-items:start">
+    <div>
+        <h2 style="margin:0 0 var(--space-3)">Community Stories &amp; Experiences</h2>
+        <p style="color:color-mix(in srgb, var(--color-text) 72%, transparent)">Read stories from others who have faced similar challenges, or <a href="{{ url_for('addictions.stories', slug=addiction.slug) }}" style="cursor:pointer">view all stories</a>.</p>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('addictions.add_story', slug=addiction.slug) }}" class="btn btn-secondary hp" style="margin-top:var(--space-3)">Share Your Story</a>
+        {% endif %}
+    </div>
+    <div style="display:grid;gap:var(--space-3)">
+        {% for story in addiction.stories.limit(2) %}
+            <a href="{{ url_for('addictions.stories', slug=addiction.slug) }}" style="text-decoration:none;color:inherit;cursor:pointer;border-left:1px solid var(--color-divider);padding-left:var(--space-4);transition:border-color .25s ease,padding-left .25s cubic-bezier(.16,1,.3,1)" onmouseover="this.style.borderColor='var(--color-accent)';this.style.paddingLeft='calc(var(--space-4) + 4px)'" onmouseout="this.style.borderColor='var(--color-divider)';this.style.paddingLeft='var(--space-4)'">
+                <div style="font-family:var(--font-heading);font-size:17px">{{ story.title }}</div>
+                <div style="font-size:12px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ story.author_name }} · {{ story.created_at.strftime('%B %d, %Y') }}</div>
+            </a>
+        {% else %}
+            <p style="margin:0;font-size:14px;color:color-mix(in srgb, var(--color-text) 65%, transparent)">No stories yet. Be the first to share.</p>
+        {% endfor %}
     </div>
 </section>
 {% endblock %}

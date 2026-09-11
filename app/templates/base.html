@@ -7,6 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -43,6 +45,21 @@
 
     <footer class="footer">
         <p>This tool is for informational purposes only. It does not replace professional medical or psychological advice. If you're in crisis, please contact a helpline or healthcare provider.</p>
+        <div class="footer-about">
+            <p class="footer-about-title"><strong>About</strong></p>
+            <div class="footer-about-grid">
+                <div class="footer-member">
+                    <p class="footer-member-name">Oshin Mehta</p>
+                    <p>7290805555</p>
+                    <p>oshinmehta13@gmail.com</p>
+                </div>
+                <div class="footer-member">
+                    <p class="footer-member-name">Udayan Sethi</p>
+                    <p>8587064023</p>
+                    <p>udayan.sethi11@gmail.com</p>
+                </div>
+            </div>
+        </div>
     </footer>
 
     {% block scripts %}{% endblock %}

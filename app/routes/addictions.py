@@ -8,6 +8,8 @@ addictions_bp = Blueprint("addictions", __name__)
 
 @addictions_bp.route("/")
 def list_addictions():
+    if not request.args.get("legacy"):
+        return redirect("http://localhost:8080/addictions")
     from flask import request
 
     q = Addiction.query

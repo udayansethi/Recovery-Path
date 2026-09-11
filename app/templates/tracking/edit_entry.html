@@ -1,78 +1,75 @@
 {% extends "base.html" %}
 
-{% block title %}Edit Tracking Entry - {{ addiction.name }} - Recovery Path{% endblock %}
+{% block title %}Edit Tracking Entry - Recovery Path{% endblock %}
 
 {% block content %}
-<section class="edit-entry-section">
-    <div class="form-header">
-        <a href="{{ url_for('tracking.addiction_calendar', slug=addiction.slug) }}" class="back-link">← Back to Calendar</a>
-        <h1>Edit {{ addiction.name }} Entry</h1>
-        <p>Update your tracking entry to reflect accurate information.</p>
-    </div>
+<a href="{{ url_for('tracking.addiction_calendar', slug=entry.addiction.slug) }}" class="plainlink" style="display:inline-block;font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);transition:transform .25s cubic-bezier(.16,1,.3,1);margin-bottom:var(--space-6)">← Back to Calendar</a>
 
-    <form method="POST" action="{{ url_for('tracking.edit_entry', entry_id=entry.id) }}" class="tracking-form">
-        <div class="form-row">
-            <div class="form-group">
-                <label for="entry_date">Date *</label>
-                <input type="date" id="entry_date" name="entry_date" value="{{ request.form.entry_date or entry.entry_date.isoformat() }}" required>
+<section style="border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-6);animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+    <h1 style="margin:0 0 var(--space-2)">Edit {{ entry.addiction.name }} Entry</h1>
+    <p style="margin:0;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Update your tracking entry to reflect accurate information.</p>
+</section>
+
+<section style="display:grid;grid-template-columns:1fr 320px;gap:var(--space-8);align-items:start;padding-top:var(--space-8)">
+    <form method="POST" action="{{ url_for('tracking.edit_entry', entry_id=entry.id) }}" style="display:grid;gap:var(--space-6)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-6)">
+            <div class="field">
+                <label>Date *</label>
+                <input type="date" name="entry_date" class="input" value="{{ request.form.entry_date or entry.entry_date.isoformat() }}" required>
             </div>
-
-            <div class="form-group">
-                <label for="entry_type">Entry Type *</label>
-                <select id="entry_type" name="entry_type" required>
+            <div class="field">
+                <label>Entry Type *</label>
+                <select name="entry_type" class="input" required>
                     <option value="">Select type...</option>
-                    <option value="relapse" {% if (request.form.entry_type or entry.entry_type) == 'relapse' %}selected{% endif %}>Relapse - Engaged in addictive behavior</option>
-                    <option value="trigger" {% if (request.form.entry_type or entry.entry_type) == 'trigger' %}selected{% endif %}>Trigger - Experienced strong urge/cravings</option>
-                    <option value="progress" {% if (request.form.entry_type or entry.entry_type) == 'progress' %}selected{% endif %}>Progress - Made positive changes</option>
-                    <option value="milestone" {% if (request.form.entry_type or entry.entry_type) == 'milestone' %}selected{% endif %}>Milestone - Achieved significant goal</option>
+                    <option value="relapse" {% if (request.form.entry_type or entry.entry_type) == 'relapse' %}selected{% endif %}>Relapse — Engaged in addictive behavior</option>
+                    <option value="trigger" {% if (request.form.entry_type or entry.entry_type) == 'trigger' %}selected{% endif %}>Trigger — Experienced strong urge/cravings</option>
+                    <option value="progress" {% if (request.form.entry_type or entry.entry_type) == 'progress' %}selected{% endif %}>Progress — Made positive changes</option>
+                    <option value="milestone" {% if (request.form.entry_type or entry.entry_type) == 'milestone' %}selected{% endif %}>Milestone — Achieved significant goal</option>
                 </select>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="description">What happened? *</label>
-            <textarea id="description" name="description" rows="3" placeholder="Describe the situation, your feelings, or what occurred..." required>{{ request.form.description or entry.description }}</textarea>
+        <div class="field">
+            <label>What happened? *</label>
+            <textarea name="description" rows="3" class="input" placeholder="Describe the situation, your feelings, or what occurred..." required>{{ request.form.description or entry.description }}</textarea>
         </div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label for="quantity">Amount/Quantity (optional)</label>
-                <input type="text" id="quantity" name="quantity" placeholder="e.g., 2 drinks, 3 hours, 1 cigarette" value="{{ request.form.quantity or entry.quantity }}">
-                <small>How much did you consume or how long did it last?</small>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-6);align-items:start">
+            <div class="field">
+                <label>Amount/Quantity (optional)</label>
+                <input type="text" name="quantity" class="input" placeholder="e.g., 2 drinks, 3 hours, 1 cigarette" value="{{ request.form.quantity or entry.quantity }}">
+                <div style="font-size:11px;color:color-mix(in srgb, var(--color-text) 55%, transparent);padding-top:4px">How much did you consume or how long did it last?</div>
             </div>
-
-            <div class="form-group">
-                <label for="severity">Severity (1-5)</label>
-                <div class="severity-selector">
+            <div class="field">
+                <label>Severity (1-5)</label>
+                <div class="seg">
                     {% for i in range(1, 6) %}
-                        <label class="severity-option">
+                        <label class="seg-opt" style="min-width:42px;justify-content:center;font-family:var(--font-heading);font-size:15px">
                             <input type="radio" name="severity" value="{{ i }}" {% if (request.form.severity|int if request.form.severity else entry.severity) == i %}checked{% endif %}>
-                            <span>{{ i }}</span>
+                            {{ i }}
                         </label>
                     {% endfor %}
                 </div>
-                <small>1 = Minor incident, 5 = Major setback</small>
+                <div style="font-size:11px;color:color-mix(in srgb, var(--color-text) 55%, transparent);padding-top:4px">1 = Minor incident, 5 = Major setback</div>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="notes">Additional Notes (optional)</label>
-            <textarea id="notes" name="notes" rows="3" placeholder="Any additional thoughts, triggers identified, or lessons learned...">{{ request.form.notes or entry.notes }}</textarea>
+        <div class="field">
+            <label>Additional Notes (optional)</label>
+            <textarea name="notes" rows="3" class="input" placeholder="Any additional thoughts, triggers identified, or lessons learned...">{{ request.form.notes or entry.notes }}</textarea>
         </div>
 
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary btn-lg">Update Entry</button>
-            <a href="{{ url_for('tracking.addiction_calendar', slug=addiction.slug) }}" class="btn btn-secondary">Cancel</a>
-            <a href="{{ url_for('tracking.delete_entry', entry_id=entry.id) }}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this entry?')">Delete Entry</a>
+        <div style="display:flex;gap:var(--space-3);border-top:1px solid var(--color-divider);padding-top:var(--space-6)">
+            <button type="submit" class="btn btn-primary blueprint ha" style="padding:var(--space-3) var(--space-6);font-size:15px">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                Update Entry
+            </button>
+            <a href="{{ url_for('tracking.addiction_calendar', slug=entry.addiction.slug) }}" class="btn btn-secondary hp" style="padding:var(--space-3) var(--space-6)">Cancel</a>
         </div>
     </form>
 
-    <div class="entry-history">
-        <h3>Entry History</h3>
-        <div class="entry-meta">
-            <p><strong>Created:</strong> {{ entry.created_at.strftime('%B %d, %Y at %I:%M %p') }}</p>
-            <p><strong>Last Updated:</strong> {{ entry.updated_at.strftime('%B %d, %Y at %I:%M %p') }}</p>
-        </div>
-    </div>
+    <form method="POST" action="{{ url_for('tracking.delete_entry', entry_id=entry.id) }}" onsubmit="return confirm('Are you sure you want to delete this entry?')">
+        <button type="submit" class="btn btn-ghost" style="padding:var(--space-2) var(--space-4);color:#d32f2f">Delete entry</button>
+    </form>
 </section>
 {% endblock %}

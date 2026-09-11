@@ -10,3 +10,8 @@ class Config:
         "DATABASE_URL"
     ) or "sqlite:///addiction_support.db"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    # AI Configuration (Free Tiers: Google Gemini or Groq Cloud)
+    GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+    GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
+    AI_MODEL = os.environ.get("AI_MODEL", "gemini-1.5-flash")

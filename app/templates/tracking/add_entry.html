@@ -3,77 +3,151 @@
 {% block title %}Add Tracking Entry - {{ addiction.name }} - Recovery Path{% endblock %}
 
 {% block content %}
-<section class="add-entry-section">
-    <div class="form-header">
-        <a href="{{ url_for('tracking.addiction_calendar', slug=addiction.slug) }}" class="back-link">← Back to Calendar</a>
-        <h1>Add {{ addiction.name }} Entry</h1>
-        <p>Record your experience to track your progress and identify patterns.</p>
-    </div>
+<a href="{{ url_for('tracking.addiction_calendar', slug=addiction.slug) }}" class="plainlink" style="display:inline-block;font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);transition:transform .25s cubic-bezier(.16,1,.3,1);margin-bottom:var(--space-6)">← Back to Calendar</a>
 
-    <form method="POST" action="{{ url_for('tracking.add_entry', slug=addiction.slug) }}" class="tracking-form">
-        <div class="form-row">
-            <div class="form-group">
-                <label for="entry_date">Date *</label>
-                <input type="date" id="entry_date" name="entry_date" value="{{ request.form.entry_date or (date.today().isoformat() if date else '') }}" required>
+<section style="border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-6);animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+    <h1 style="margin:0 0 var(--space-2)">Add {{ addiction.name }} Entry</h1>
+    <p style="margin:0;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Record your experience to track your progress and identify patterns.</p>
+</section>
+
+<section style="display:grid;grid-template-columns:1fr 320px;gap:var(--space-8);align-items:start;padding-top:var(--space-8)">
+    <form method="POST" action="{{ url_for('tracking.add_entry', slug=addiction.slug) }}" style="display:grid;gap:var(--space-6)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-6)">
+            <div class="field">
+                <label>Date *</label>
+                <input type="date" name="entry_date" class="input" value="{{ request.form.entry_date or '' }}" required>
             </div>
-
-            <div class="form-group">
-                <label for="entry_type">Entry Type *</label>
-                <select id="entry_type" name="entry_type" required>
+            <div class="field">
+                <label>Entry Type *</label>
+                <select name="entry_type" class="input" required>
                     <option value="">Select type...</option>
-                    <option value="relapse" {% if request.form.entry_type == 'relapse' %}selected{% endif %}>Relapse - Engaged in addictive behavior</option>
-                    <option value="trigger" {% if request.form.entry_type == 'trigger' %}selected{% endif %}>Trigger - Experienced strong urge/cravings</option>
-                    <option value="progress" {% if request.form.entry_type == 'progress' %}selected{% endif %}>Progress - Made positive changes</option>
-                    <option value="milestone" {% if request.form.entry_type == 'milestone' %}selected{% endif %}>Milestone - Achieved significant goal</option>
+                    <option value="relapse" {% if request.form.entry_type == 'relapse' %}selected{% endif %}>Relapse — Engaged in addictive behavior</option>
+                    <option value="trigger" {% if request.form.entry_type == 'trigger' %}selected{% endif %}>Trigger — Experienced strong urge/cravings</option>
+                    <option value="progress" {% if request.form.entry_type == 'progress' %}selected{% endif %}>Progress — Made positive changes</option>
+                    <option value="milestone" {% if request.form.entry_type == 'milestone' %}selected{% endif %}>Milestone — Achieved significant goal</option>
                 </select>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="description">What happened? *</label>
-            <textarea id="description" name="description" rows="3" placeholder="Describe the situation, your feelings, or what occurred..." required>{{ request.form.description }}</textarea>
+        <div class="field">
+            <label>What happened? *</label>
+            <textarea name="description" rows="3" class="input" placeholder="Describe the situation, your feelings, or what occurred..." required>{{ request.form.description }}</textarea>
         </div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label for="quantity">Amount/Quantity (optional)</label>
-                <input type="text" id="quantity" name="quantity" placeholder="e.g., 2 drinks, 3 hours, 1 cigarette" value="{{ request.form.quantity }}">
-                <small>How much did you consume or how long did it last?</small>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-6);align-items:start">
+            <div class="field">
+                <label>Amount/Quantity (optional)</label>
+                <input type="text" name="quantity" class="input" placeholder="e.g., 2 drinks, 3 hours, 1 cigarette" value="{{ request.form.quantity }}">
+                <div style="font-size:11px;color:color-mix(in srgb, var(--color-text) 55%, transparent);padding-top:4px">How much did you consume or how long did it last?</div>
             </div>
-
-            <div class="form-group">
-                <label for="severity">Severity (1-5)</label>
-                <div class="severity-selector">
+            <div class="field">
+                <label>Severity (1-5)</label>
+                <div class="seg">
                     {% for i in range(1, 6) %}
-                        <label class="severity-option">
+                        <label class="seg-opt" style="min-width:42px;justify-content:center;font-family:var(--font-heading);font-size:15px">
                             <input type="radio" name="severity" value="{{ i }}" {% if (request.form.severity|int if request.form.severity else 1) == i %}checked{% endif %}>
-                            <span>{{ i }}</span>
+                            {{ i }}
                         </label>
                     {% endfor %}
                 </div>
-                <small>1 = Minor incident, 5 = Major setback</small>
+                <div style="font-size:11px;color:color-mix(in srgb, var(--color-text) 55%, transparent);padding-top:4px">1 = Minor incident, 5 = Major setback</div>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="notes">Additional Notes (optional)</label>
-            <textarea id="notes" name="notes" rows="3" placeholder="Any additional thoughts, triggers identified, or lessons learned...">{{ request.form.notes }}</textarea>
+        <div class="field">
+            <label>Additional Notes (optional)</label>
+            <textarea name="notes" id="entry_notes" rows="3" class="input" placeholder="Any additional thoughts, triggers identified, or lessons learned...">{{ request.form.notes }}</textarea>
         </div>
 
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary btn-lg">Save Entry</button>
-            <a href="{{ url_for('tracking.addiction_calendar', slug=addiction.slug) }}" class="btn btn-secondary">Cancel</a>
+        <!-- AI Coping Assistant Card -->
+        <div class="ai-advice-card blueprint" id="ai-entry-tip-card" style="margin-top:0">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="ai-advice-header">
+                <div class="ai-advice-title">
+                    <span>✦</span> AI Coping &amp; Reflection Assistant
+                </div>
+                <button type="button" id="get-ai-tip-btn" class="ai-btn-action" onclick="fetchAIEntryTip()">
+                    Get AI Tip
+                </button>
+            </div>
+            <div id="ai-tip-body">
+                <p style="margin:0;color:color-mix(in srgb, var(--color-text) 70%, transparent);font-size:13.5px">
+                    Click "Get AI Tip" to receive an immediate supportive reflection and a 2-minute calming action.
+                </p>
+            </div>
+        </div>
+
+        <div style="display:flex;gap:var(--space-3);border-top:1px solid var(--color-divider);padding-top:var(--space-6)">
+
+            <button type="submit" class="btn btn-primary blueprint ha" style="padding:var(--space-3) var(--space-6);font-size:15px">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                Save Entry
+            </button>
+            <a href="{{ url_for('tracking.addiction_calendar', slug=addiction.slug) }}" class="btn btn-secondary hp" style="padding:var(--space-3) var(--space-6)">Cancel</a>
         </div>
     </form>
 
-    <div class="entry-tips">
-        <h3>Tips for Effective Tracking</h3>
-        <ul>
-            <li><strong>Be honest:</strong> Accurate tracking helps identify patterns and triggers</li>
-            <li><strong>Record promptly:</strong> Note entries as soon as possible after they occur</li>
-            <li><strong>Include context:</strong> What led to this? How were you feeling?</li>
-            <li><strong>Celebrate progress:</strong> Don't forget to log positive changes and milestones</li>
-        </ul>
+    <div class="blueprint" style="padding:var(--space-6)">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="eyebrow klein">Tips for Effective Tracking</div>
+        <div style="display:grid;gap:var(--space-3);font-size:13px">
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)"><strong>Be honest:</strong> Accurate tracking helps identify patterns and triggers</div>
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)"><strong>Record promptly:</strong> Note entries as soon as possible after they occur</div>
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)"><strong>Include context:</strong> What led to this? How were you feeling?</div>
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)"><strong>Celebrate progress:</strong> Don't forget to log positive changes and milestones</div>
+        </div>
     </div>
 </section>
 {% endblock %}
+
+{% block scripts %}
+<script>
+async function fetchAIEntryTip() {
+    const btn = document.getElementById("get-ai-tip-btn");
+    const body = document.getElementById("ai-tip-body");
+    const typeSelect = document.querySelector('select[name="entry_type"]');
+    const descText = document.querySelector('textarea[name="description"]');
+    const notesText = document.getElementById("entry_notes");
+    const severityInput = document.querySelector('input[name="severity"]:checked');
+
+    if (!btn || !body) return;
+
+    const entryType = typeSelect ? typeSelect.value : "trigger";
+    const severity = severityInput ? severityInput.value : 3;
+    const notes = (descText ? descText.value : "") + " " + (notesText ? notesText.value : "");
+
+    btn.disabled = true;
+    btn.innerHTML = "Thinking...";
+    body.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 0;color:var(--color-accent-400);">
+            <div class="ai-typing-indicator"><div class="ai-msg-content"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></div>
+            <span>Generating personalized coping advice...</span>
+        </div>
+    `;
+
+    try {
+        const response = await fetch("/api/ai/entry-tip", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                entry_type: entryType,
+                severity: parseInt(severity),
+                notes: notes,
+                addiction_name: {{ addiction.name|tojson }}
+            })
+        });
+
+        const data = await response.json();
+        const tip = data.tip || "Take 3 slow, deep breaths. You are making positive progress.";
+        body.innerHTML = `<div class="ai-advice-content">${formatAIMarkdown(tip)}</div>`;
+        btn.innerHTML = "Refresh Tip";
+    } catch (err) {
+        body.innerHTML = `<p style="color:#f87171;margin:0;">Could not connect to AI service. Take 3 slow breaths.</p>`;
+        btn.innerHTML = "Retry";
+    } finally {
+        btn.disabled = false;
+    }
+}
+</script>
+{% endblock %}
+

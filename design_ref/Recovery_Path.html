@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/industry-d1122d7d-567b-4487-a869-2ad746935853/styles.css">
+<script src="_ds/industry-d1122d7d-567b-4487-a869-2ad746935853/_ds_bundle.js"></script>
+<style>
+a { color: var(--color-accent-700); text-decoration: underline; }
+a:hover { color: var(--color-accent-800); }
+.nav a, .plainlink { text-decoration: none; }
+ul { margin: 0; padding: 0; list-style: none; }
+html { scroll-behavior: smooth; }
+@keyframes rp-fade-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes rp-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rp-pop { 0% { opacity: 0; transform: scale(.92); } 65% { transform: scale(1.035); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes rp-slide-down { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes rp-spin { to { transform: rotate(360deg); } }
+@keyframes rp-marker { from { left: 0%; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</helmet>
+<div style="min-height:100vh;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);display:flex;flex-direction:column">
+
+  <div style="border-bottom:1px solid var(--color-divider);background:var(--color-bg)">
+    <div style="max-width:1160px;margin:0 auto;padding:6px var(--space-8);display:flex;justify-content:space-between;font-family:var(--font-heading);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent)">
+      <span>Recovery Path â€” Awareness &amp; Support</span>
+      <span>{{ sheet }}</span>
+    </div>
+  </div>
+
+  <header style="border-bottom:1px solid var(--color-divider);position:sticky;top:0;z-index:5;background:var(--color-bg)">
+    <nav class="nav" style="max-width:1160px;margin:0 auto;padding:var(--space-3) var(--space-8)">
+      <a class="nav-brand plainlink" onClick="{{ goHome }}" style="cursor:pointer;display:flex;align-items:center;gap:10px;transition:opacity .3s cubic-bezier(.16,1,.3,1)" style-hover="opacity:0.68">
+        <span style="width:18px;height:18px;border:1px solid var(--color-accent);display:block;position:relative">
+          <span style="position:absolute;inset:4px;background:var(--color-accent)"></span>
+        </span>
+        Recovery Path
+      </a>
+      <div style="display:flex;align-items:center;gap:var(--space-6);white-space:nowrap">
+        <a onClick="{{ goExplore }}" style="cursor:pointer;transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Explore</a>
+        <sc-if value="{{ auth }}" hint-placeholder-val="{{ false }}">
+          <a onClick="{{ goDash }}" style="cursor:pointer;transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Dashboard</a>
+          <a onClick="{{ goTrack }}" style="cursor:pointer;transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">My Tracking</a>
+          <a onClick="{{ logout }}" style="cursor:pointer;transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Log Out</a>
+        </sc-if>
+        <sc-if value="{{ guest }}" hint-placeholder-val="{{ true }}">
+          <a onClick="{{ goLogin }}" style="cursor:pointer;transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Log In</a>
+          <a class="btn btn-primary" onClick="{{ goRegister }}" style="cursor:pointer;color:var(--color-bg);transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s ease" style-hover="transform:translateY(-2px);box-shadow:var(--shadow-md)" style-active="transform:translateY(0) scale(.96)">Sign Up</a>
+        </sc-if>
+      </div>
+    </nav>
+  </header>
+
+  <sc-if value="{{ flash }}" hint-placeholder-val="{{ false }}">
+    <div style="border-bottom:1px solid var(--color-divider);background:var(--color-accent-100);animation:rp-slide-down .4s cubic-bezier(.16,1,.3,1) both;overflow:hidden">
+      <div style="max-width:1160px;margin:0 auto;padding:var(--space-3) var(--space-8);display:flex;gap:10px;align-items:center;font-size:13px;color:var(--color-accent-800)">
+        <span style="font-family:var(--font-heading);letter-spacing:0.14em;text-transform:uppercase;font-size:11px">Notice</span>
+        <span style="width:1px;height:14px;background:var(--color-accent-400)"></span>
+        <span>{{ flash }}</span>
+      </div>
+    </div>
+  </sc-if>
+
+  <main style="flex:1;max-width:1160px;width:100%;margin:0 auto;padding:var(--space-8) var(--space-8) 60px">
+
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <section style="display:grid;grid-template-columns:1.35fr 1fr;gap:var(--space-8);align-items:start;padding-bottom:var(--space-8);animation:rp-fade-up .6s cubic-bezier(.16,1,.3,1) both">
+        <div>
+          <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:var(--space-4)">01 â€” Start here</div>
+          <h1 style="font-size:66px;margin:0 0 var(--space-4);line-height:1.02">Understand your habits.<br><span style="color:var(--color-accent-700)">Take the next step.</span></h1>
+          <p style="font-size:17px;max-width:52ch;margin-bottom:var(--space-6);color:color-mix(in srgb, var(--color-text) 78%, transparent)">Answer a short questionnaire about your relationship with different behaviorsâ€”substance, digital, or lifestyleâ€”and receive personalized guidance to move forward.</p>
+          <div style="display:flex;gap:var(--space-3);align-items:center">
+            <a class="btn btn-primary blueprint" onClick="{{ goExplore }}" style="cursor:pointer;padding:var(--space-3) var(--space-6);font-size:15px;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s ease" style-hover="transform:translateY(-3px);box-shadow:var(--shadow-md)" style-active="transform:translateY(-1px) scale(.97)">
+              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              Explore Topics
+            </a>
+            <sc-if value="{{ guest }}" hint-placeholder-val="{{ true }}">
+              <a class="btn btn-secondary" onClick="{{ goRegister }}" style="cursor:pointer;padding:var(--space-3) var(--space-6);font-size:15px;transition:transform .3s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-3px)" style-active="transform:translateY(-1px) scale(.97)">Create Account</a>
+            </sc-if>
+          </div>
+        </div>
+        <div class="blueprint" onMouseMove="{{ tilt }}" onMouseLeave="{{ untilt }}" style="padding:var(--space-6);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease;animation:rp-fade-up .6s cubic-bezier(.16,1,.3,1) .1s both">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);margin-bottom:var(--space-4)">Scope of the tool</div>
+          <div style="display:grid;gap:var(--space-3);font-size:14px">
+            <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-2)"><span>Topics covered</span><span style="font-family:var(--font-heading);font-size:18px">17</span></div>
+            <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-2)"><span>Questions per topic</span><span style="font-family:var(--font-heading);font-size:18px">5</span></div>
+            <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-2)"><span>Categories</span><span style="font-family:var(--font-heading);font-size:18px">3</span></div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;padding-top:var(--space-1)">
+              <span class="tag tag-accent">Substance</span>
+              <span class="tag tag-accent">Behavioral</span>
+              <span class="tag tag-accent">Health</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section style="border-top:1px solid var(--color-divider);padding-top:var(--space-8);display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-6)">
+        <div class="blueprint" onMouseMove="{{ tilt }}" onMouseLeave="{{ untilt }}" style="padding:var(--space-6);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease;animation:rp-fade-up .55s cubic-bezier(.16,1,.3,1) .05s both">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="font-family:var(--font-heading);font-size:40px;line-height:1;color:var(--color-accent-400)">01</div>
+          <h3 style="margin:var(--space-4) 0 var(--space-2)">Explore</h3>
+          <p style="margin:0;font-size:14px;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Browse addictions across substance, behavioral, and health categories.</p>
+        </div>
+        <div class="blueprint" onMouseMove="{{ tilt }}" onMouseLeave="{{ untilt }}" style="padding:var(--space-6);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease;animation:rp-fade-up .55s cubic-bezier(.16,1,.3,1) .12s both">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="font-family:var(--font-heading);font-size:40px;line-height:1;color:var(--color-accent-400)">02</div>
+          <h3 style="margin:var(--space-4) 0 var(--space-2)">Assess</h3>
+          <p style="margin:0;font-size:14px;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Answer a simple questionnaire tailored to each topic.</p>
+        </div>
+        <div class="blueprint" onMouseMove="{{ tilt }}" onMouseLeave="{{ untilt }}" style="padding:var(--space-6);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease;animation:rp-fade-up .55s cubic-bezier(.16,1,.3,1) .19s both">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="font-family:var(--font-heading);font-size:40px;line-height:1;color:var(--color-accent-400)">03</div>
+          <h3 style="margin:var(--space-4) 0 var(--space-2)">Act</h3>
+          <p style="margin:0;font-size:14px;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Get personalized tips and recommended next steps.</p>
+        </div>
+      </section>
+
+      <section style="border-top:1px solid var(--color-divider);margin-top:var(--space-8);padding-top:var(--space-6);font-size:15px">
+        <p style="margin:0">Ready to learn more? <a onClick="{{ goExplore }}" style="cursor:pointer">Browse addictions</a> or <a onClick="{{ goLogin }}" style="cursor:pointer">log in</a> to save your progress.</p>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isExplore }}" hint-placeholder-val="{{ false }}">
+      <section style="display:flex;justify-content:space-between;align-items:flex-end;gap:var(--space-8);border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-6);animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+        <div>
+          <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:var(--space-3)">Index â€” Topics</div>
+          <h1 style="margin:0 0 var(--space-2)">Explore Topics</h1>
+          <p style="margin:0;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Select a topic to learn more and take the questionnaire for personalized guidance.</p>
+        </div>
+        <div style="font-family:var(--font-heading);font-size:13px;letter-spacing:0.14em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);white-space:nowrap">{{ topicCount }} shown</div>
+      </section>
+
+      <section style="padding:var(--space-6) 0;border-bottom:1px solid var(--color-divider)">
+        <div style="display:grid;grid-template-columns:1fr 220px auto;gap:var(--space-3);align-items:end">
+          <div class="field">
+            <label>Search</label>
+            <input class="input" type="text" placeholder="Search topics..." value="{{ search }}" onInput="{{ setSearch }}">
+          </div>
+          <div class="field">
+            <label>Category</label>
+            <select class="input" value="{{ cat }}" onChange="{{ setCat }}">
+              <option value="">All categories</option>
+              <option value="Substance">Substance</option>
+              <option value="Behavioral">Behavioral</option>
+              <option value="Health">Health</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" style="min-height:36px;transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)" style-active="transform:scale(.96)" onClick="{{ noop }}">Search</button>
+        </div>
+      </section>
+
+      <section style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--space-8);padding-top:var(--space-8)">
+        <sc-for list="{{ topics }}" as="t" hint-placeholder-count="6">
+          <div class="blueprint" onClick="{{ t.open }}" onMouseMove="{{ tilt }}" onMouseLeave="{{ untilt }}" style="padding:var(--space-6);cursor:pointer;display:flex;flex-direction:column;gap:var(--space-3);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease;animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) {{ t.delay }} both" style-hover="box-shadow:var(--shadow-md)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <span style="width:44px;height:44px;border:1px solid var(--color-accent-400);display:grid;place-items:center;font-family:var(--font-heading);font-size:16px;letter-spacing:0.06em;color:var(--color-accent-700)">{{ t.code }}</span>
+              <span style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.16em;color:color-mix(in srgb, var(--color-text) 45%, transparent)">{{ t.num }}</span>
+            </div>
+            <div>
+              <span class="tag tag-accent" style="margin-bottom:8px">{{ t.category }}</span>
+              <h3 style="margin:8px 0 0;font-size:22px">{{ t.name }}</h3>
+            </div>
+            <p style="margin:0;font-size:14px;flex:1;color:color-mix(in srgb, var(--color-text) 72%, transparent)">{{ t.short }}</p>
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-3);font-family:var(--font-heading);font-size:13px;letter-spacing:0.06em;color:var(--color-accent-700)">Take questionnaire â†’</div>
+          </div>
+        </sc-for>
+      </section>
+      <sc-if value="{{ noTopics }}" hint-placeholder-val="{{ false }}">
+        <p style="padding-top:var(--space-8);color:color-mix(in srgb, var(--color-text) 60%, transparent)">No topics match your search. Try different keywords or categories.</p>
+      </sc-if>
+    </sc-if>
+
+    <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+      <a class="plainlink" onClick="{{ goExplore }}" style="cursor:pointer;font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateX(-3px)">â† Back to topics</a>
+      <section style="display:grid;grid-template-columns:1.4fr 1fr;gap:var(--space-8);align-items:start;margin-top:var(--space-6);border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-8);animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+        <div>
+          <span class="tag tag-accent">{{ cur.category }}</span>
+          <h1 style="margin:var(--space-3) 0 var(--space-4);font-size:52px">{{ cur.name }}</h1>
+          <p style="font-size:17px;max-width:54ch;color:color-mix(in srgb, var(--color-text) 78%, transparent)">{{ cur.description }}</p>
+          <sc-if value="{{ auth }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;gap:var(--space-3);flex-wrap:wrap;margin-top:var(--space-6)">
+              <a class="btn btn-primary blueprint" onClick="{{ startQuiz }}" style="cursor:pointer;padding:var(--space-3) var(--space-6);font-size:15px;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s ease" style-hover="transform:translateY(-3px);box-shadow:var(--shadow-md)" style-active="transform:translateY(-1px) scale(.97)">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                Start Questionnaire
+              </a>
+              <a class="btn btn-secondary" onClick="{{ goCal }}" style="cursor:pointer;padding:var(--space-3) var(--space-6);font-size:15px;transition:transform .3s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-3px)" style-active="transform:scale(.97)">Track Progress</a>
+              <a class="btn btn-secondary" onClick="{{ goGoals }}" style="cursor:pointer;padding:var(--space-3) var(--space-6);font-size:15px;transition:transform .3s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-3px)" style-active="transform:scale(.97)">Set Goals</a>
+            </div>
+          </sc-if>
+          <sc-if value="{{ guest }}" hint-placeholder-val="{{ true }}">
+            <p style="margin-top:var(--space-6);font-size:15px">Please <a onClick="{{ goLogin }}" style="cursor:pointer">log in</a> or <a onClick="{{ goRegister }}" style="cursor:pointer">create an account</a> to take the questionnaire and track your progress.</p>
+          </sc-if>
+        </div>
+        <div class="blueprint" onMouseMove="{{ tilt }}" onMouseLeave="{{ untilt }}" style="padding:var(--space-6);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);margin-bottom:var(--space-4)">Topic sheet</div>
+          <div style="display:grid;gap:var(--space-3);font-size:14px">
+            <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-2)"><span>Reference</span><span style="font-family:var(--font-heading)">{{ cur.code }} / {{ cur.num }}</span></div>
+            <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-2)"><span>Category</span><span style="font-family:var(--font-heading)">{{ cur.category }}</span></div>
+            <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-2)"><span>Questions</span><span style="font-family:var(--font-heading)">5</span></div>
+            <div style="display:flex;justify-content:space-between"><span>Community stories</span><span style="font-family:var(--font-heading)">{{ storyCount }}</span></div>
+          </div>
+        </div>
+      </section>
+      <section style="padding-top:var(--space-8);display:grid;grid-template-columns:1.4fr 1fr;gap:var(--space-8);align-items:start">
+        <div>
+          <h2 style="margin:0 0 var(--space-3)">Community Stories &amp; Experiences</h2>
+          <p style="color:color-mix(in srgb, var(--color-text) 72%, transparent)">Read stories from others who have faced similar challenges, or <a onClick="{{ goStories }}" style="cursor:pointer">view all stories</a>.</p>
+          <sc-if value="{{ auth }}" hint-placeholder-val="{{ false }}">
+            <a class="btn btn-secondary" onClick="{{ goAddStory }}" style="cursor:pointer;margin-top:var(--space-3);transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Share Your Story</a>
+          </sc-if>
+        </div>
+        <div style="display:grid;gap:var(--space-3)">
+          <sc-for list="{{ storyPreview }}" as="s" hint-placeholder-count="2">
+            <div onClick="{{ goStories }}" style="cursor:pointer;border-left:1px solid var(--color-divider);padding-left:var(--space-4);transition:border-color .25s ease,padding-left .25s cubic-bezier(.16,1,.3,1)" style-hover="border-color:var(--color-accent);padding-left:calc(var(--space-4) + 4px)">
+              <div style="font-family:var(--font-heading);font-size:17px">{{ s.t }}</div>
+              <div style="font-size:12px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ s.a }} Â· {{ s.d }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ false }}">
+      <section style="display:grid;grid-template-columns:1fr 420px;gap:var(--space-8);align-items:start;padding-top:var(--space-6);animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+        <div>
+          <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:var(--space-4)">Account access</div>
+          <h1 style="font-size:52px;margin:0 0 var(--space-4)">Log In</h1>
+          <p style="max-width:44ch;color:color-mix(in srgb, var(--color-text) 75%, transparent)">Log in to save questionnaire results, keep a tracking calendar, and set recovery goals. Your entries are private to your account.</p>
+        </div>
+        <form class="blueprint" onSubmit="{{ doLogin }}" style="padding:var(--space-6);display:grid;gap:var(--space-4);animation:rp-fade-up .55s cubic-bezier(.16,1,.3,1) .08s both">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="field">
+            <label>Email</label>
+            <input class="input" type="email" placeholder="you@example.com" style="transition:border-color .25s ease">
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input class="input" type="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" style="transition:border-color .25s ease">
+          </div>
+          <label class="radio" style="cursor:pointer">
+            <input type="checkbox">
+            <span class="dot" style="border-radius:0;transition:transform .2s cubic-bezier(.34,1.56,.64,1)"></span>
+            Remember me
+          </label>
+          <button class="btn btn-primary btn-block blueprint" type="submit" disabled="{{ busyLogin }}" style="min-height:40px;transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)" style-active="transform:scale(.98)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <sc-if value="{{ busyLogin }}" hint-placeholder-val="{{ false }}">
+              <span style="width:14px;height:14px;border:2px solid color-mix(in srgb, var(--color-bg) 35%, transparent);border-top-color:var(--color-bg);border-radius:50%;display:inline-block;animation:rp-spin .7s linear infinite"></span>
+            </sc-if>
+            <sc-if value="{{ notBusyLogin }}" hint-placeholder-val="{{ true }}">Log In</sc-if>
+          </button>
+          <p style="margin:0;font-size:14px;text-align:center;color:color-mix(in srgb, var(--color-text) 70%, transparent)">Don't have an account? <a onClick="{{ goRegister }}" style="cursor:pointer">Sign up</a></p>
+        </form>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isRegister }}" hint-placeholder-val="{{ false }}">
+      <section style="display:grid;grid-template-columns:1fr 420px;gap:var(--space-8);align-items:start;padding-top:var(--space-6);animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+        <div>
+          <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:var(--space-4)">New account</div>
+          <h1 style="font-size:52px;margin:0 0 var(--space-4)">Create Account</h1>
+          <p style="max-width:44ch;color:color-mix(in srgb, var(--color-text) 75%, transparent)">An account unlocks the questionnaire, the tracking calendar, goals, and community stories.</p>
+          <div style="margin-top:var(--space-6);display:grid;gap:var(--space-2);font-size:14px">
+            <div style="display:flex;gap:10px;border-top:1px solid var(--color-divider);padding-top:var(--space-2)"><span style="font-family:var(--font-heading);color:var(--color-accent-700)">01</span><span>Save results from every questionnaire you take.</span></div>
+            <div style="display:flex;gap:10px;border-top:1px solid var(--color-divider);padding-top:var(--space-2)"><span style="font-family:var(--font-heading);color:var(--color-accent-700)">02</span><span>Log entries on a calendar and spot patterns.</span></div>
+            <div style="display:flex;gap:10px;border-top:1px solid var(--color-divider);padding-top:var(--space-2)"><span style="font-family:var(--font-heading);color:var(--color-accent-700)">03</span><span>Set goals and share your story when you're ready.</span></div>
+          </div>
+        </div>
+        <form class="blueprint" onSubmit="{{ doRegister }}" style="padding:var(--space-6);display:grid;gap:var(--space-4);animation:rp-fade-up .55s cubic-bezier(.16,1,.3,1) .08s both">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="field"><label>Name</label><input class="input" type="text" placeholder="Your name" style="transition:border-color .25s ease"></div>
+          <div class="field"><label>Email</label><input class="input" type="email" placeholder="you@example.com" style="transition:border-color .25s ease"></div>
+          <div class="field"><label>Password</label><input class="input" type="password" placeholder="At least 6 characters" style="transition:border-color .25s ease"></div>
+          <div class="field"><label>Confirm Password</label><input class="input" type="password" placeholder="Confirm password" style="transition:border-color .25s ease"></div>
+          <button class="btn btn-primary btn-block blueprint" type="submit" disabled="{{ busyRegister }}" style="min-height:40px;transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)" style-active="transform:scale(.98)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <sc-if value="{{ busyRegister }}" hint-placeholder-val="{{ false }}">
+              <span style="width:14px;height:14px;border:2px solid color-mix(in srgb, var(--color-bg) 35%, transparent);border-top-color:var(--color-bg);border-radius:50%;display:inline-block;animation:rp-spin .7s linear infinite"></span>
+            </sc-if>
+            <sc-if value="{{ notBusyRegister }}" hint-placeholder-val="{{ true }}">Create Account</sc-if>
+          </button>
+          <p style="margin:0;font-size:14px;text-align:center;color:color-mix(in srgb, var(--color-text) 70%, transparent)">Already have an account? <a onClick="{{ goLogin }}" style="cursor:pointer">Log in</a></p>
+        </form>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isDash }}" hint-placeholder-val="{{ false }}">
+      <section style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-6);animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+        <div>
+          <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:var(--space-3)">Assessment record</div>
+          <h1 style="margin:0 0 var(--space-2)">Your Dashboard</h1>
+          <p style="margin:0;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Past questionnaire results and recommendations.</p>
+        </div>
+        <a class="btn btn-secondary" onClick="{{ goExplore }}" style="cursor:pointer;transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Explore Topics</a>
+      </section>
+      <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ true }}">
+        <section style="padding-top:var(--space-6);animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) .05s both">
+          <table class="table">
+            <thead><tr><th>Ref</th><th>Category</th><th>Topic</th><th>Score</th><th>Severity</th><th>Taken</th><th></th></tr></thead>
+            <tbody>
+              <sc-for list="{{ pastResults }}" as="r" hint-placeholder-count="3">
+                <tr onClick="{{ r.open }}" style="cursor:pointer;transition:background-color .25s ease,transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateX(2px)">
+                  <td style="font-family:var(--font-heading);color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ r.code }}</td>
+                  <td>{{ r.category }}</td>
+                  <td style="font-family:var(--font-heading);font-size:17px">{{ r.name }}</td>
+                  <td>{{ r.score }}</td>
+                  <td><span class="tag tag-accent">{{ r.levelLabel }}</span></td>
+                  <td>{{ r.date }}</td>
+                  <td style="text-align:right;color:var(--color-accent-700)">View â†’</td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </section>
+      </sc-if>
+      <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+        <section class="blueprint" style="margin-top:var(--space-8);padding:var(--space-8);display:grid;justify-items:center;gap:var(--space-4);text-align:center;animation:rp-pop .5s cubic-bezier(.34,1.56,.64,1) both">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <p style="margin:0;color:color-mix(in srgb, var(--color-text) 70%, transparent)">You haven't completed any questionnaires yet.</p>
+          <a class="btn btn-primary" onClick="{{ goExplore }}" style="cursor:pointer;transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Explore Topics</a>
+        </section>
+      </sc-if>
+    </sc-if>
+
+    <sc-if value="{{ isQuiz }}" hint-placeholder-val="{{ false }}">
+      <a class="plainlink" onClick="{{ goDetail }}" style="cursor:pointer;font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateX(-3px)">â† Back to {{ cur.name }}</a>
+      <section style="display:flex;justify-content:space-between;align-items:flex-end;gap:var(--space-8);border-bottom:1px solid var(--color-divider);padding:var(--space-6) 0;animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+        <div>
+          <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:var(--space-3)">{{ cur.code }} / {{ cur.num }} â€” Questionnaire</div>
+          <h1 style="margin:0 0 var(--space-2)">{{ cur.name }} â€” Questionnaire</h1>
+          <p style="margin:0;max-width:62ch;color:color-mix(in srgb, var(--color-text) 74%, transparent)">Rate each statement from 1 (rarely/never) to 5 (very often/always). Be honest for the most accurate results.</p>
+        </div>
+        <div style="text-align:right;white-space:nowrap">
+          <div style="font-family:var(--font-heading);font-size:13px;letter-spacing:0.14em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ answeredLabel }}</div>
+          <div style="width:140px;height:4px;background:var(--color-surface);border:1px solid var(--color-divider);margin-top:8px;overflow:hidden">
+            <div style="height:100%;background:var(--color-accent);width:{{ progressPct }};transition:width .4s cubic-bezier(.16,1,.3,1)"></div>
+          </div>
+        </div>
+      </section>
+      <form onSubmit="{{ submitQuiz }}">
+        <div style="display:flex;justify-content:space-between;font-size:11px;font-family:var(--font-heading);letter-spacing:0.14em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 50%, transparent);padding:var(--space-4) 0 0">
+          <span>Statement</span><span>1 = rarely / never &nbsp;Â·&nbsp; 5 = very often / always</span>
+        </div>
+        <sc-for list="{{ questions }}" as="q" hint-placeholder-count="5">
+          <div style="display:grid;grid-template-columns:1fr auto;gap:var(--space-6);align-items:center;border-top:1px solid var(--color-divider);padding:var(--space-4) 0;transition:background-color .25s ease;animation:rp-fade-up .4s cubic-bezier(.16,1,.3,1) {{ q.delay }} both" style-hover="background-color:color-mix(in srgb, var(--color-text) 2.5%, transparent)">
+            <div style="display:flex;gap:var(--space-4);align-items:baseline">
+              <span style="font-family:var(--font-heading);font-size:13px;color:var(--color-accent-400)">{{ q.num }}</span>
+              <span style="font-size:17px">{{ q.text }}</span>
+            </div>
+            <div class="seg">
+              <sc-for list="{{ q.opts }}" as="o" hint-placeholder-count="5">
+                <label class="seg-opt" style="min-width:44px;justify-content:center;font-family:var(--font-heading);font-size:15px;transition:background-color .25s cubic-bezier(.16,1,.3,1),transform .15s cubic-bezier(.34,1.56,.64,1)" style-active="transform:scale(.9)">
+                  <input type="radio" checked="{{ o.checked }}" onChange="{{ o.pick }}">
+                  {{ o.v }}
+                </label>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+        <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-6);display:flex;gap:var(--space-4);align-items:center">
+          <button class="btn btn-primary blueprint" type="submit" disabled="{{ busyQuiz }}" style="padding:var(--space-3) var(--space-6);font-size:15px;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s ease" style-hover="transform:translateY(-3px);box-shadow:var(--shadow-md)" style-active="transform:scale(.97)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <sc-if value="{{ busyQuiz }}" hint-placeholder-val="{{ false }}">
+              <span style="width:14px;height:14px;border:2px solid color-mix(in srgb, var(--color-bg) 35%, transparent);border-top-color:var(--color-bg);border-radius:50%;display:inline-block;animation:rp-spin .7s linear infinite"></span>
+            </sc-if>
+            <sc-if value="{{ notBusyQuiz }}" hint-placeholder-val="{{ true }}">Get Results</sc-if>
+          </button>
+          <sc-if value="{{ quizWaiting }}" hint-placeholder-val="{{ true }}">
+            <span style="font-size:13px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">Answer every statement to see your score.</span>
+          </sc-if>
+        </div>
+      </form>
+    </sc-if>
+
+    <sc-if value="{{ isResults }}" hint-placeholder-val="{{ false }}">
+      <a class="plainlink" onClick="{{ goDetail }}" style="cursor:pointer;font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateX(-3px)">â† Back to {{ cur.name }}</a>
+      <h1 style="margin:var(--space-6) 0 var(--space-6);font-size:52px;animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">Your Results: {{ cur.name }}</h1>
+      <section style="display:grid;grid-template-columns:260px 1fr;gap:var(--space-8);align-items:start;border-top:1px solid var(--color-divider);padding-top:var(--space-8);animation:rp-fade-up .55s cubic-bezier(.16,1,.3,1) .08s both">
+        <div>
+          <div class="blueprint" onMouseMove="{{ tilt }}" onMouseLeave="{{ untilt }}" style="padding:var(--space-6);text-align:center;transition:transform .35s cubic-bezier(.16,1,.3,1);animation:rp-pop .6s cubic-bezier(.34,1.56,.64,1) both">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent)">Score</div>
+            <div style="font-family:var(--font-heading);font-size:88px;line-height:1;color:var(--color-accent-700);animation:rp-pop .6s cubic-bezier(.34,1.56,.64,1) .1s both">{{ res.score }}</div>
+            <div style="font-size:12px;color:color-mix(in srgb, var(--color-text) 50%, transparent);margin-bottom:var(--space-3)">of {{ res.max }}</div>
+            <span class="tag tag-accent" style="font-size:12px">{{ res.level }}</span>
+          </div>
+          <div style="margin-top:var(--space-6)">
+            <div style="height:6px;border:1px solid var(--color-divider);position:relative;background:var(--color-surface)">
+              <span style="position:absolute;top:-5px;width:2px;height:14px;background:var(--color-accent);left:{{ markerLeft }};animation:rp-marker 1s cubic-bezier(.16,1,.3,1) .3s both"></span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--font-heading);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 50%, transparent);padding-top:6px">
+              <span>Low</span><span>Moderate</span><span>High</span>
+            </div>
+            <div style="font-size:12px;color:color-mix(in srgb, var(--color-text) 55%, transparent);padding-top:var(--space-3)">Taken {{ res.date }}</div>
+          </div>
+        </div>
+        <div>
+          <h2 style="margin:0 0 var(--space-4)">Personalized Tips</h2>
+          <ul style="display:grid;gap:0">
+            <sc-for list="{{ tips }}" as="t" hint-placeholder-count="4">
+              <li style="display:grid;grid-template-columns:44px 1fr;gap:var(--space-3);border-top:1px solid var(--color-divider);padding:var(--space-3) 0;font-size:17px;animation:rp-fade-up .45s cubic-bezier(.16,1,.3,1) {{ t.delay }} both">
+                <span style="font-family:var(--font-heading);font-size:13px;color:var(--color-accent-400)">{{ t.num }}</span>
+                <span>{{ t.text }}</span>
+              </li>
+            </sc-for>
+          </ul>
+          <div class="blueprint" onMouseMove="{{ tilt }}" onMouseLeave="{{ untilt }}" style="padding:var(--space-6);margin-top:var(--space-8);background:var(--color-accent-100);transition:transform .35s cubic-bezier(.16,1,.3,1);animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) .2s both">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div style="font-family:var(--font-heading);font-size:18px;color:var(--color-accent-800);margin-bottom:6px">Professional Support</div>
+            <p style="margin:0;font-size:15px;color:var(--color-accent-800)">{{ res.professional }}</p>
+          </div>
+          <div style="display:flex;gap:var(--space-3);margin-top:var(--space-8)">
+            <a class="btn btn-secondary" onClick="{{ goExplore }}" style="cursor:pointer;padding:var(--space-3) var(--space-6);transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Explore Other Topics</a>
+            <a class="btn btn-primary blueprint" onClick="{{ goDetail }}" style="cursor:pointer;padding:var(--space-3) var(--space-6);transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s ease" style-hover="transform:translateY(-2px);box-shadow:var(--shadow-md)" style-active="transform:scale(.97)">
+              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              Back to {{ cur.name }}
+            </a>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isTrack }}" hint-placeholder-val="{{ false }}">
+      <section style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-6);animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+        <div>
+          <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:var(--space-3)">Tracking</div>
+          <h1 style="margin:0 0 var(--space-2)">My Recovery Dashboard</h1>
+          <p style="margin:0;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Track your progress, manage goals, and stay committed to your recovery journey.</p>
+        </div>
+        <a class="btn btn-secondary" onClick="{{ goCal }}" style="cursor:pointer;transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Open Calendar</a>
+      </section>
+
+      <section style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-6);padding:var(--space-8) 0">
+        <div class="blueprint" onMouseMove="{{ tilt }}" onMouseLeave="{{ untilt }}" style="padding:var(--space-6);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease;animation:rp-pop .5s cubic-bezier(.34,1.56,.64,1) both">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="font-family:var(--font-heading);font-size:56px;line-height:1;color:var(--color-accent-700)">{{ stats.entries }}</div>
+          <div style="font-family:var(--font-heading);font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);padding-top:var(--space-2)">Tracking Entries</div>
+        </div>
+        <div class="blueprint" onMouseMove="{{ tilt }}" onMouseLeave="{{ untilt }}" style="padding:var(--space-6);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease;animation:rp-pop .5s cubic-bezier(.34,1.56,.64,1) .08s both">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="font-family:var(--font-heading);font-size:56px;line-height:1;color:var(--color-accent-700)">{{ stats.completed }}</div>
+          <div style="font-family:var(--font-heading);font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);padding-top:var(--space-2)">Completed Goals</div>
+        </div>
+        <div class="blueprint" onMouseMove="{{ tilt }}" onMouseLeave="{{ untilt }}" style="padding:var(--space-6);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease;animation:rp-pop .5s cubic-bezier(.34,1.56,.64,1) .16s both">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="font-family:var(--font-heading);font-size:56px;line-height:1;color:var(--color-accent-700)">{{ stats.active }}</div>
+          <div style="font-family:var(--font-heading);font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);padding-top:var(--space-2)">Active Goals</div>
+        </div>
+      </section>
+
+      <section style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-8);border-top:1px solid var(--color-divider);padding-top:var(--space-8)">
+        <div>
+          <h2 style="margin:0 0 var(--space-4)">Active Goals</h2>
+          <sc-if value="{{ hasActiveGoals }}" hint-placeholder-val="{{ true }}">
+            <div style="display:grid;gap:var(--space-6)">
+              <sc-for list="{{ activeGoals }}" as="g" hint-placeholder-count="2">
+                <div class="blueprint" onMouseMove="{{ tilt }}" onMouseLeave="{{ untilt }}" style="padding:var(--space-4);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease;animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both" style-hover="box-shadow:var(--shadow-sm)">
+                  <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-3)">
+                    <h3 style="margin:0;font-size:20px">{{ g.title }}</h3>
+                    <span class="tag tag-accent">{{ g.typeLabel }}</span>
+                  </div>
+                  <p style="margin:var(--space-2) 0 0;font-size:14px;color:color-mix(in srgb, var(--color-text) 72%, transparent)">{{ g.description }}</p>
+                  <div style="display:flex;gap:var(--space-6);font-size:12px;padding-top:var(--space-3);color:color-mix(in srgb, var(--color-text) 60%, transparent)">
+                    <sc-if value="{{ g.hasTarget }}" hint-placeholder-val="{{ true }}"><span>Target: {{ g.target }}</span></sc-if>
+                    <sc-if value="{{ g.hasDate }}" hint-placeholder-val="{{ true }}"><span>Due: {{ g.targetDate }}</span></sc-if>
+                    <span>Topic: {{ g.topic }}</span>
+                  </div>
+                  <div style="display:flex;gap:var(--space-2);padding-top:var(--space-4)">
+                    <a class="btn btn-secondary" onClick="{{ g.manage }}" style="cursor:pointer;transition:transform .2s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Manage</a>
+                    <a class="btn btn-secondary" onClick="{{ g.track }}" style="cursor:pointer;transition:transform .2s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Track</a>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ noActiveGoals }}" hint-placeholder-val="{{ false }}">
+            <div class="blueprint" style="padding:var(--space-8);display:grid;justify-items:start;gap:var(--space-3);animation:rp-pop .5s cubic-bezier(.34,1.56,.64,1) both">
+              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              <p style="margin:0;color:color-mix(in srgb, var(--color-text) 70%, transparent)">You haven't set any goals yet.</p>
+              <a class="btn btn-primary" onClick="{{ goExplore }}" style="cursor:pointer;transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Browse Addictions</a>
+            </div>
+          </sc-if>
+        </div>
+        <div>
+          <h2 style="margin:0 0 var(--space-4)">Recent Activity (Last 7 Days)</h2>
+          <sc-if value="{{ hasRecent }}" hint-placeholder-val="{{ true }}">
+            <div style="display:grid;gap:0">
+              <sc-for list="{{ recent }}" as="e" hint-placeholder-count="3">
+                <div style="border-top:1px solid var(--color-divider);padding:var(--space-4) 0;display:grid;grid-template-columns:40px 1fr auto;gap:var(--space-4);align-items:start;transition:padding-left .25s cubic-bezier(.16,1,.3,1),background-color .25s ease" style-hover="padding-left:6px;background-color:color-mix(in srgb, var(--color-text) 3%, transparent)">
+                  <span style="width:34px;height:34px;border:1px solid var(--color-accent-400);display:grid;place-items:center;font-family:var(--font-heading);font-size:15px;color:var(--color-accent-700)">{{ e.mark }}</span>
+                  <div>
+                    <div style="font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ e.date }} Â· {{ e.type }} Â· {{ e.topic }}</div>
+                    <p style="margin:4px 0 0;font-size:14px">{{ e.description }}</p>
+                    <sc-if value="{{ e.hasQty }}" hint-placeholder-val="{{ false }}">
+                      <div style="font-size:12px;color:color-mix(in srgb, var(--color-text) 60%, transparent)">Amount: {{ e.qty }}</div>
+                    </sc-if>
+                    <div style="display:flex;gap:4px;align-items:center;padding-top:8px">
+                      <span style="font-size:11px;font-family:var(--font-heading);letter-spacing:0.1em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 50%, transparent);margin-right:4px">Severity</span>
+                      <sc-for list="{{ e.dots }}" as="d" hint-placeholder-count="5">
+                        <sc-if value="{{ d.on }}" hint-placeholder-val="{{ true }}"><span style="width:8px;height:8px;background:var(--color-accent);display:block"></span></sc-if>
+                        <sc-if value="{{ d.off }}" hint-placeholder-val="{{ false }}"><span style="width:8px;height:8px;border:1px solid var(--color-neutral-400);display:block"></span></sc-if>
+                      </sc-for>
+                    </div>
+                  </div>
+                  <a class="btn btn-secondary" onClick="{{ e.edit }}" style="cursor:pointer;font-size:13px;transition:transform .2s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Edit</a>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ noRecent }}" hint-placeholder-val="{{ false }}">
+            <div class="blueprint" style="padding:var(--space-8);display:grid;justify-items:start;gap:var(--space-3);animation:rp-pop .5s cubic-bezier(.34,1.56,.64,1) .05s both">
+              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              <p style="margin:0;color:color-mix(in srgb, var(--color-text) 70%, transparent)">No recent activity. Start tracking your progress!</p>
+              <a class="btn btn-primary" onClick="{{ goExplore }}" style="cursor:pointer;transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Start Tracking</a>
+            </div>
+          </sc-if>
+        </div>
+      </section>
+
+      <section style="border-top:1px solid var(--color-divider);margin-top:var(--space-8);padding-top:var(--space-6)">
+        <h2 style="margin:0 0 var(--space-4)">Quick Actions</h2>
+        <div style="display:flex;gap:var(--space-3);flex-wrap:wrap">
+          <a class="btn btn-primary blueprint" onClick="{{ goExplore }}" style="cursor:pointer;padding:var(--space-3) var(--space-6);transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s ease" style-hover="transform:translateY(-3px);box-shadow:var(--shadow-md)" style-active="transform:scale(.97)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            Browse All Addictions
+          </a>
+          <a class="btn btn-secondary" onClick="{{ startQuiz }}" style="cursor:pointer;padding:var(--space-3) var(--space-6);transition:transform .3s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-3px)" style-active="transform:scale(.97)">Take Assessment</a>
+          <a class="btn btn-secondary" onClick="{{ goStories }}" style="cursor:pointer;padding:var(--space-3) var(--space-6);transition:transform .3s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-3px)" style-active="transform:scale(.97)">Read Stories</a>
+        </div>
+      </section>
+    </sc-if>
+    <sc-if value="{{ isCal }}" hint-placeholder-val="{{ false }}">
+      <a class="plainlink" onClick="{{ goTrack }}" style="cursor:pointer;font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateX(-3px)">â† Back to Dashboard</a>
+      <section style="display:flex;justify-content:space-between;align-items:flex-end;gap:var(--space-8);border-bottom:1px solid var(--color-divider);padding:var(--space-6) 0;animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+        <div>
+          <span class="tag tag-accent">{{ cur.category }}</span>
+          <h1 style="margin:var(--space-3) 0 0">{{ cur.name }} â€” Tracking Calendar</h1>
+        </div>
+        <div style="display:flex;gap:var(--space-3)">
+          <a class="btn btn-primary blueprint" onClick="{{ addEntry }}" style="cursor:pointer;padding:var(--space-2) var(--space-6);transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s ease" style-hover="transform:translateY(-3px);box-shadow:var(--shadow-md)" style-active="transform:scale(.97)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            Add Entry
+          </a>
+          <a class="btn btn-secondary" onClick="{{ goGoals }}" style="cursor:pointer;padding:var(--space-2) var(--space-6);transition:transform .3s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-3px)" style-active="transform:scale(.97)">Manage Goals</a>
+        </div>
+      </section>
+
+      <section style="display:grid;grid-template-columns:1fr 300px;gap:var(--space-8);align-items:start;padding-top:var(--space-8)">
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:var(--space-4)">
+            <a class="btn btn-secondary" onClick="{{ prevMonth }}" style="cursor:pointer;transition:transform .2s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateX(-2px)" style-active="transform:scale(.95)">â€¹ Previous</a>
+            <h2 style="margin:0;font-size:26px;animation:rp-fade-in .3s ease both">{{ monthLabel }}</h2>
+            <a class="btn btn-secondary" onClick="{{ nextMonth }}" style="cursor:pointer;transition:transform .2s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateX(2px)" style-active="transform:scale(.95)">Next â€º</a>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);border-left:1px solid var(--color-divider);border-top:1px solid var(--color-divider);animation:rp-fade-in .4s ease both">
+            <sc-for list="{{ dayHeads }}" as="h" hint-placeholder-count="7">
+              <div style="border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);padding:6px 8px;font-family:var(--font-heading);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ h.d }}</div>
+            </sc-for>
+            <sc-for list="{{ weeks }}" as="w" hint-placeholder-count="5">
+              <sc-for list="{{ w.days }}" as="c" hint-placeholder-count="7">
+                <div onClick="{{ c.open }}" style="border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);min-height:86px;padding:6px 8px;position:relative;transition:background-color .25s ease" style-hover="background-color:color-mix(in srgb, var(--color-accent) 6%, transparent)">
+                  <div style="font-family:var(--font-heading);font-size:15px;color:color-mix(in srgb, var(--color-text) 65%, transparent)">{{ c.day }}</div>
+                  <sc-if value="{{ c.entry }}" hint-placeholder-val="{{ false }}">
+                    <div style="cursor:pointer;padding-top:6px;display:grid;gap:4px;justify-items:start">
+                      <span style="width:26px;height:26px;border:1px solid var(--color-accent);background:var(--color-accent-100);display:grid;place-items:center;font-family:var(--font-heading);font-size:13px;color:var(--color-accent-800);transition:transform .25s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.12)">{{ c.mark }}</span>
+                      <span style="font-size:10px;letter-spacing:0.08em;font-family:var(--font-heading);color:var(--color-accent-700)">{{ c.label }}</span>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </sc-for>
+          </div>
+
+          <div style="display:flex;gap:var(--space-8);align-items:center;padding-top:var(--space-6)">
+            <span style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent)">Entry Types</span>
+            <div style="display:flex;gap:var(--space-6);font-size:13px">
+              <span style="display:flex;gap:8px;align-items:center"><span style="width:18px;height:18px;border:1px solid var(--color-accent);display:grid;place-items:center;font-family:var(--font-heading);font-size:11px">R</span>Relapse</span>
+              <span style="display:flex;gap:8px;align-items:center"><span style="width:18px;height:18px;border:1px solid var(--color-accent);display:grid;place-items:center;font-family:var(--font-heading);font-size:11px">T</span>Trigger</span>
+              <span style="display:flex;gap:8px;align-items:center"><span style="width:18px;height:18px;border:1px solid var(--color-accent);display:grid;place-items:center;font-family:var(--font-heading);font-size:11px">P</span>Progress</span>
+              <span style="display:flex;gap:8px;align-items:center"><span style="width:18px;height:18px;border:1px solid var(--color-accent);display:grid;place-items:center;font-family:var(--font-heading);font-size:11px">M</span>Milestone</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;gap:var(--space-6)">
+          <div class="blueprint" onMouseMove="{{ tilt }}" onMouseLeave="{{ untilt }}" style="padding:var(--space-6);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);margin-bottom:var(--space-4)">This Month's Activity</div>
+            <div style="display:grid;gap:var(--space-3);font-size:14px">
+              <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-2)"><span>Days with entries</span><span style="font-family:var(--font-heading);font-size:20px">{{ monthStats.days }}</span></div>
+              <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-2)"><span>Relapse days</span><span style="font-family:var(--font-heading);font-size:20px">{{ monthStats.relapse }}</span></div>
+              <div style="display:flex;justify-content:space-between"><span>Progress days</span><span style="font-family:var(--font-heading);font-size:20px">{{ monthStats.progress }}</span></div>
+            </div>
+          </div>
+          <sc-if value="{{ hasCalGoals }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <h3 style="margin:0 0 var(--space-3);font-size:20px">Active Goals for {{ cur.name }}</h3>
+              <sc-for list="{{ calGoals }}" as="g" hint-placeholder-count="1">
+                <div style="border-top:1px solid var(--color-divider);padding:var(--space-3) 0">
+                  <div style="font-family:var(--font-heading);font-size:17px">{{ g.title }}</div>
+                  <p style="margin:2px 0 0;font-size:13px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">{{ g.description }}</p>
+                  <sc-if value="{{ g.hasDate }}" hint-placeholder-val="{{ true }}">
+                    <div style="font-size:12px;color:color-mix(in srgb, var(--color-text) 60%, transparent);padding-top:4px">Due: {{ g.targetDate }}</div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isEntryForm }}" hint-placeholder-val="{{ false }}">
+      <a class="plainlink" onClick="{{ cancelEntry }}" style="cursor:pointer;font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateX(-3px)">â† Back to Calendar</a>
+      <section style="border-bottom:1px solid var(--color-divider);padding:var(--space-6) 0;animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+        <h1 style="margin:0 0 var(--space-2)">{{ entryTitle }}</h1>
+        <p style="margin:0;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Record your experience to track your progress and identify patterns.</p>
+      </section>
+      <section style="display:grid;grid-template-columns:1fr 320px;gap:var(--space-8);align-items:start;padding-top:var(--space-8)">
+        <form onSubmit="{{ saveEntry }}" style="display:grid;gap:var(--space-6)">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-6)">
+            <div class="field">
+              <label>Date *</label>
+              <input class="input" type="date" value="{{ form.date }}" onChange="{{ setDate }}" style="transition:border-color .25s ease">
+            </div>
+            <div class="field">
+              <label>Entry Type *</label>
+              <select class="input" value="{{ form.type }}" onChange="{{ setType }}" style="transition:border-color .25s ease">
+                <option value="">Select type...</option>
+                <option value="relapse">Relapse â€” Engaged in addictive behavior</option>
+                <option value="trigger">Trigger â€” Experienced strong urge/cravings</option>
+                <option value="progress">Progress â€” Made positive changes</option>
+                <option value="milestone">Milestone â€” Achieved significant goal</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>What happened? *</label>
+            <textarea class="input" rows="3" placeholder="Describe the situation, your feelings, or what occurred..." value="{{ form.description }}" onChange="{{ setDesc }}"></textarea>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-6);align-items:start">
+            <div class="field">
+              <label>Amount/Quantity (optional)</label>
+              <input class="input" type="text" placeholder="e.g., 2 drinks, 3 hours, 1 cigarette" value="{{ form.quantity }}" onChange="{{ setQty }}">
+              <div style="font-size:11px;color:color-mix(in srgb, var(--color-text) 55%, transparent);padding-top:4px">How much did you consume or how long did it last?</div>
+            </div>
+            <div class="field">
+              <label>Severity (1-5)</label>
+              <div class="seg">
+                <sc-for list="{{ sevOpts }}" as="o" hint-placeholder-count="5">
+                  <label class="seg-opt" style="min-width:42px;justify-content:center;font-family:var(--font-heading);font-size:15px;transition:background-color .25s cubic-bezier(.16,1,.3,1),transform .15s cubic-bezier(.34,1.56,.64,1)" style-active="transform:scale(.9)">
+                    <input type="radio" checked="{{ o.checked }}" onChange="{{ o.pick }}">
+                    {{ o.v }}
+                  </label>
+                </sc-for>
+              </div>
+              <div style="font-size:11px;color:color-mix(in srgb, var(--color-text) 55%, transparent);padding-top:4px">1 = Minor incident, 5 = Major setback</div>
+            </div>
+          </div>
+          <div class="field">
+            <label>Additional Notes (optional)</label>
+            <textarea class="input" rows="3" placeholder="Any additional thoughts, triggers identified, or lessons learned..." value="{{ form.notes }}" onChange="{{ setNotes }}"></textarea>
+          </div>
+          <div style="display:flex;gap:var(--space-3);border-top:1px solid var(--color-divider);padding-top:var(--space-6)">
+            <button class="btn btn-primary blueprint" type="submit" disabled="{{ busyEntry }}" style="padding:var(--space-3) var(--space-6);font-size:15px;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s ease" style-hover="transform:translateY(-3px);box-shadow:var(--shadow-md)" style-active="transform:scale(.97)">
+              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              <sc-if value="{{ busyEntry }}" hint-placeholder-val="{{ false }}">
+                <span style="width:14px;height:14px;border:2px solid color-mix(in srgb, var(--color-bg) 35%, transparent);border-top-color:var(--color-bg);border-radius:50%;display:inline-block;animation:rp-spin .7s linear infinite"></span>
+              </sc-if>
+              <sc-if value="{{ notBusyEntry }}" hint-placeholder-val="{{ true }}">Save Entry</sc-if>
+            </button>
+            <a class="btn btn-secondary" onClick="{{ cancelEntry }}" style="cursor:pointer;padding:var(--space-3) var(--space-6);transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Cancel</a>
+            <sc-if value="{{ editingEntry }}" hint-placeholder-val="{{ false }}">
+              <a class="btn btn-ghost" onClick="{{ deleteEntry }}" style="cursor:pointer;padding:var(--space-3) var(--space-4);transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Delete entry</a>
+            </sc-if>
+          </div>
+        </form>
+        <div class="blueprint" style="padding:var(--space-6)">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);margin-bottom:var(--space-4)">Tips for Effective Tracking</div>
+          <div style="display:grid;gap:var(--space-3);font-size:13px">
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)"><strong>Be honest:</strong> Accurate tracking helps identify patterns and triggers</div>
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)"><strong>Record promptly:</strong> Note entries as soon as possible after they occur</div>
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)"><strong>Include context:</strong> What led to this? How were you feeling?</div>
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)"><strong>Celebrate progress:</strong> Don't forget to log positive changes and milestones</div>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isGoals }}" hint-placeholder-val="{{ false }}">
+      <a class="plainlink" onClick="{{ goCal }}" style="cursor:pointer;font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateX(-3px)">â† Back to Calendar</a>
+      <section style="display:flex;justify-content:space-between;align-items:flex-end;gap:var(--space-8);border-bottom:1px solid var(--color-divider);padding:var(--space-6) 0;animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+        <div>
+          <h1 style="margin:0 0 var(--space-2)">{{ cur.name }} Goals</h1>
+          <p style="margin:0;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Set and track your recovery goals to stay motivated and focused.</p>
+        </div>
+        <a class="btn btn-primary blueprint" onClick="{{ addGoal }}" style="cursor:pointer;padding:var(--space-2) var(--space-6);transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s ease" style-hover="transform:translateY(-3px);box-shadow:var(--shadow-md)" style-active="transform:scale(.97)">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          + Add New Goal
+        </a>
+      </section>
+
+      <sc-if value="{{ hasSlugGoals }}" hint-placeholder-val="{{ true }}">
+        <section style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:var(--space-8);padding:var(--space-8) 0">
+          <sc-for list="{{ slugGoals }}" as="g" hint-placeholder-count="2">
+            <div class="blueprint" onMouseMove="{{ tilt }}" onMouseLeave="{{ untilt }}" style="padding:var(--space-6);display:flex;flex-direction:column;gap:var(--space-3);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease;animation:rp-pop .5s cubic-bezier(.34,1.56,.64,1) {{ g.delay }} both" style-hover="box-shadow:var(--shadow-sm)">
+              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-3)">
+                <h3 style="margin:0;font-size:22px">{{ g.title }}</h3>
+                <span class="tag tag-accent" style="white-space:nowrap">{{ g.statusLabel }}</span>
+              </div>
+              <p style="margin:0;font-size:14px;flex:1;color:color-mix(in srgb, var(--color-text) 74%, transparent)">{{ g.description }}</p>
+              <div style="display:grid;gap:2px;font-size:12px;color:color-mix(in srgb, var(--color-text) 60%, transparent);border-top:1px solid var(--color-divider);padding-top:var(--space-3)">
+                <span>Set: {{ g.created }}</span>
+                <sc-if value="{{ g.hasDate }}" hint-placeholder-val="{{ true }}"><span>Target: {{ g.targetDate }}</span></sc-if>
+                <sc-if value="{{ g.open }}" hint-placeholder-val="{{ false }}"><span>Completed: {{ g.completed }}</span></sc-if>
+              </div>
+              <sc-if value="{{ g.hasNotes }}" hint-placeholder-val="{{ true }}">
+                <div style="font-size:13px"><strong>Progress:</strong> {{ g.notes }}</div>
+              </sc-if>
+              <div style="display:flex;gap:var(--space-2);flex-wrap:wrap;padding-top:var(--space-2)">
+                <sc-if value="{{ g.running }}" hint-placeholder-val="{{ true }}">
+                  <a class="btn btn-secondary" onClick="{{ g.edit }}" style="cursor:pointer;font-size:13px;transition:transform .2s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Edit</a>
+                  <a class="btn btn-secondary" onClick="{{ g.complete }}" style="cursor:pointer;font-size:13px;transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:translateY(-2px) scale(1.03)">Complete</a>
+                </sc-if>
+                <a class="btn btn-ghost" onClick="{{ g.remove }}" style="cursor:pointer;font-size:13px;transition:opacity .2s ease" style-hover="opacity:.65">Delete</a>
+              </div>
+            </div>
+          </sc-for>
+        </section>
+      </sc-if>
+      <sc-if value="{{ noSlugGoals }}" hint-placeholder-val="{{ false }}">
+        <section class="blueprint" style="margin:var(--space-8) 0;padding:var(--space-8);display:grid;gap:var(--space-3);justify-items:start;max-width:620px;animation:rp-pop .5s cubic-bezier(.34,1.56,.64,1) both">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <h3 style="margin:0">No goals set yet</h3>
+          <p style="margin:0;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Goals help you stay focused and motivated on your recovery journey. Start by setting your first goal!</p>
+          <a class="btn btn-primary" onClick="{{ addGoal }}" style="cursor:pointer;transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Set Your First Goal</a>
+        </section>
+      </sc-if>
+
+      <section style="border-top:1px solid var(--color-divider);padding-top:var(--space-6)">
+        <h3 style="margin:0 0 var(--space-4)">Goal Statistics</h3>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-6)">
+          <div style="border-left:1px solid var(--color-divider);padding-left:var(--space-4);animation:rp-fade-up .45s cubic-bezier(.16,1,.3,1) both">
+            <div style="font-family:var(--font-heading);font-size:40px;line-height:1;color:var(--color-accent-700)">{{ goalStats.total }}</div>
+            <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent)">Total Goals</div>
+          </div>
+          <div style="border-left:1px solid var(--color-divider);padding-left:var(--space-4);animation:rp-fade-up .45s cubic-bezier(.16,1,.3,1) .06s both">
+            <div style="font-family:var(--font-heading);font-size:40px;line-height:1;color:var(--color-accent-700)">{{ goalStats.completed }}</div>
+            <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent)">Completed</div>
+          </div>
+          <div style="border-left:1px solid var(--color-divider);padding-left:var(--space-4);animation:rp-fade-up .45s cubic-bezier(.16,1,.3,1) .12s both">
+            <div style="font-family:var(--font-heading);font-size:40px;line-height:1;color:var(--color-accent-700)">{{ goalStats.active }}</div>
+            <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent)">Active</div>
+          </div>
+          <div style="border-left:1px solid var(--color-divider);padding-left:var(--space-4);animation:rp-fade-up .45s cubic-bezier(.16,1,.3,1) .18s both">
+            <div style="font-family:var(--font-heading);font-size:40px;line-height:1;color:var(--color-accent-700)">{{ goalStats.rate }}</div>
+            <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent)">Success Rate</div>
+          </div>
+        </div>
+      </section>
+
+      <section style="border-top:1px solid var(--color-divider);margin-top:var(--space-8);padding-top:var(--space-6)">
+        <h3 style="margin:0 0 var(--space-4)">Goal Setting Tips</h3>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-6)">
+          <div><h4 style="margin:0 0 4px">Be Specific</h4><p style="margin:0;font-size:13px;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Instead of "stop drinking," try "go 30 days without alcohol"</p></div>
+          <div><h4 style="margin:0 0 4px">Set Realistic Goals</h4><p style="margin:0;font-size:13px;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Start small and build up. Small wins build momentum.</p></div>
+          <div><h4 style="margin:0 0 4px">Track Progress</h4><p style="margin:0;font-size:13px;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Regularly update your goals with progress notes.</p></div>
+          <div><h4 style="margin:0 0 4px">Celebrate Success</h4><p style="margin:0;font-size:13px;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Acknowledge and reward yourself for completing goals.</p></div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isGoalForm }}" hint-placeholder-val="{{ false }}">
+      <a class="plainlink" onClick="{{ cancelGoal }}" style="cursor:pointer;font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateX(-3px)">â† Back to Goals</a>
+      <section style="border-bottom:1px solid var(--color-divider);padding:var(--space-6) 0;animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+        <h1 style="margin:0 0 var(--space-2)">{{ goalTitle }}</h1>
+        <p style="margin:0;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Set a clear, achievable goal to help guide your recovery journey.</p>
+      </section>
+      <section style="display:grid;grid-template-columns:1fr 320px;gap:var(--space-8);align-items:start;padding-top:var(--space-8)">
+        <form onSubmit="{{ saveGoal }}" style="display:grid;gap:var(--space-6)">
+          <div class="field">
+            <label>Goal Title *</label>
+            <input class="input" type="text" placeholder="e.g., Stay sober for 30 days" value="{{ form.title }}" onChange="{{ setTitle }}">
+            <div style="font-size:11px;color:color-mix(in srgb, var(--color-text) 55%, transparent);padding-top:4px">Keep it concise and specific</div>
+          </div>
+          <div class="field">
+            <label>Goal Description *</label>
+            <textarea class="input" rows="3" placeholder="Describe what you want to achieve and why it's important..." value="{{ form.description }}" onChange="{{ setGoalDesc }}"></textarea>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-6)">
+            <div class="field">
+              <label>Target Date (optional)</label>
+              <input class="input" type="date" value="{{ form.targetDate }}" onChange="{{ setTargetDate }}">
+              <div style="font-size:11px;color:color-mix(in srgb, var(--color-text) 55%, transparent);padding-top:4px">When do you plan to achieve this goal?</div>
+            </div>
+            <div class="field">
+              <label>Goal Type</label>
+              <select class="input" value="{{ form.type }}" onChange="{{ setGoalType }}">
+                <option value="abstinence">Abstinence â€” Stay clean/sober</option>
+                <option value="reduction">Reduction â€” Cut down usage</option>
+                <option value="behavioral">Behavioral â€” Change habits</option>
+                <option value="milestone">Milestone â€” Achieve specific accomplishment</option>
+                <option value="maintenance">Maintenance â€” Sustain progress</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Initial Progress Notes (optional)</label>
+            <textarea class="input" rows="2" placeholder="Any initial thoughts or steps you're planning to take..." value="{{ form.notes }}" onChange="{{ setGoalNotes }}"></textarea>
+          </div>
+          <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-6)">
+            <h3 style="margin:0 0 var(--space-4);font-size:20px">Goal Examples</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-6)">
+              <div><h4 style="margin:0 0 2px;font-size:16px">Short-term Goal</h4><p style="margin:0;font-size:13px;color:color-mix(in srgb, var(--color-text) 72%, transparent)">"Go 7 days without smoking"</p></div>
+              <div><h4 style="margin:0 0 2px;font-size:16px">Long-term Goal</h4><p style="margin:0;font-size:13px;color:color-mix(in srgb, var(--color-text) 72%, transparent)">"Achieve 6 months of sobriety"</p></div>
+              <div><h4 style="margin:0 0 2px;font-size:16px">Behavioral Goal</h4><p style="margin:0;font-size:13px;color:color-mix(in srgb, var(--color-text) 72%, transparent)">"Replace smoking breaks with 10-minute walks"</p></div>
+              <div><h4 style="margin:0 0 2px;font-size:16px">Milestone Goal</h4><p style="margin:0;font-size:13px;color:color-mix(in srgb, var(--color-text) 72%, transparent)">"Complete a 5K run without stopping"</p></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:var(--space-3);border-top:1px solid var(--color-divider);padding-top:var(--space-6)">
+            <button class="btn btn-primary blueprint" type="submit" disabled="{{ busyGoal }}" style="padding:var(--space-3) var(--space-6);font-size:15px;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s ease" style-hover="transform:translateY(-3px);box-shadow:var(--shadow-md)" style-active="transform:scale(.97)">
+              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              <sc-if value="{{ busyGoal }}" hint-placeholder-val="{{ false }}">
+                <span style="width:14px;height:14px;border:2px solid color-mix(in srgb, var(--color-bg) 35%, transparent);border-top-color:var(--color-bg);border-radius:50%;display:inline-block;animation:rp-spin .7s linear infinite"></span>
+              </sc-if>
+              <sc-if value="{{ notBusyGoal }}" hint-placeholder-val="{{ true }}">Create Goal</sc-if>
+            </button>
+            <a class="btn btn-secondary" onClick="{{ cancelGoal }}" style="cursor:pointer;padding:var(--space-3) var(--space-6);transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Cancel</a>
+          </div>
+        </form>
+        <div class="blueprint" style="padding:var(--space-6)">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);margin-bottom:var(--space-4)">SMART Goals for Recovery</div>
+          <div style="display:grid;gap:var(--space-3);font-size:13px">
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)"><strong>Specific:</strong> Clearly define what you want to achieve</div>
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)"><strong>Measurable:</strong> Include criteria for tracking progress</div>
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)"><strong>Achievable:</strong> Set realistic goals you can actually reach</div>
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)"><strong>Relevant:</strong> Goals should matter to your recovery</div>
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)"><strong>Time-bound:</strong> Set a timeframe for completion</div>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isStories }}" hint-placeholder-val="{{ false }}">
+      <a class="plainlink" onClick="{{ goDetail }}" style="cursor:pointer;font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateX(-3px)">â† Back to {{ cur.name }}</a>
+      <section style="display:flex;justify-content:space-between;align-items:flex-end;gap:var(--space-8);border-bottom:1px solid var(--color-divider);padding:var(--space-6) 0;animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+        <div>
+          <span class="tag tag-accent">{{ cur.category }}</span>
+          <h1 style="margin:var(--space-3) 0 var(--space-2)">{{ cur.name }} â€” Community Stories</h1>
+          <p style="margin:0;max-width:60ch;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Real experiences from people who have faced similar challenges. Your story matters too.</p>
+        </div>
+        <sc-if value="{{ auth }}" hint-placeholder-val="{{ false }}">
+          <a class="btn btn-primary blueprint" onClick="{{ goAddStory }}" style="cursor:pointer;padding:var(--space-2) var(--space-6);white-space:nowrap;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s ease" style-hover="transform:translateY(-3px);box-shadow:var(--shadow-md)" style-active="transform:scale(.97)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            Share Your Story
+          </a>
+        </sc-if>
+      </section>
+      <sc-if value="{{ hasStories }}" hint-placeholder-val="{{ true }}">
+        <section style="padding-top:var(--space-8);display:grid;gap:var(--space-8)">
+          <sc-for list="{{ curStories }}" as="s" hint-placeholder-count="2">
+            <article style="display:grid;grid-template-columns:220px 1fr;gap:var(--space-8);border-top:1px solid var(--color-divider);padding-top:var(--space-6);animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) {{ s.delay }} both">
+              <div>
+                <h3 style="margin:0 0 var(--space-2);font-size:24px">{{ s.t }}</h3>
+                <div style="font-family:var(--font-heading);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent)">By {{ s.a }}</div>
+                <div style="font-size:12px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ s.d }}</div>
+              </div>
+              <p style="margin:0;font-size:16px;max-width:70ch;text-wrap:pretty">{{ s.c }}</p>
+            </article>
+          </sc-for>
+        </section>
+      </sc-if>
+      <sc-if value="{{ noStories }}" hint-placeholder-val="{{ false }}">
+        <section class="blueprint" style="margin-top:var(--space-8);padding:var(--space-8);display:grid;gap:var(--space-3);justify-items:start;max-width:620px;animation:rp-pop .5s cubic-bezier(.34,1.56,.64,1) both">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <p style="margin:0;color:color-mix(in srgb, var(--color-text) 72%, transparent)">No stories have been shared yet. Be the first to share your experience!</p>
+          <sc-if value="{{ auth }}" hint-placeholder-val="{{ false }}">
+            <a class="btn btn-primary" onClick="{{ goAddStory }}" style="cursor:pointer;transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Share Your Story</a>
+          </sc-if>
+        </section>
+      </sc-if>
+    </sc-if>
+
+    <sc-if value="{{ isStoryForm }}" hint-placeholder-val="{{ false }}">
+      <a class="plainlink" onClick="{{ cancelStory }}" style="cursor:pointer;font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateX(-3px)">â† Back to Stories</a>
+      <section style="border-bottom:1px solid var(--color-divider);padding:var(--space-6) 0;animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+        <span class="tag tag-accent">{{ cur.category }}</span>
+        <h1 style="margin:var(--space-3) 0 var(--space-2)">Share Your {{ cur.name }} Story</h1>
+        <p style="margin:0;max-width:62ch;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Your experience can help others feel less alone. Share as much or as little as you're comfortable with.</p>
+      </section>
+      <section style="display:grid;grid-template-columns:1fr 320px;gap:var(--space-8);align-items:start;padding-top:var(--space-8)">
+        <form onSubmit="{{ saveStory }}" style="display:grid;gap:var(--space-6)">
+          <div class="field">
+            <label>Story Title</label>
+            <input class="input" type="text" maxlength="200" placeholder="Give your story a title..." value="{{ story.title }}" onChange="{{ setStoryTitle }}">
+          </div>
+          <div class="field">
+            <label>Your Story</label>
+            <textarea class="input" rows="10" style="min-height:220px" placeholder="Share your experience, challenges, progress, or advice..." value="{{ story.content }}" onChange="{{ setStoryBody }}"></textarea>
+          </div>
+          <label class="radio" style="cursor:pointer">
+            <input type="checkbox">
+            <span class="dot" style="border-radius:0"></span>
+            Post anonymously (your name won't be shown)
+          </label>
+          <div style="display:flex;gap:var(--space-3);border-top:1px solid var(--color-divider);padding-top:var(--space-6)">
+            <button class="btn btn-primary blueprint" type="submit" disabled="{{ busyStory }}" style="padding:var(--space-3) var(--space-6);font-size:15px;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s ease" style-hover="transform:translateY(-3px);box-shadow:var(--shadow-md)" style-active="transform:scale(.97)">
+              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              <sc-if value="{{ busyStory }}" hint-placeholder-val="{{ false }}">
+                <span style="width:14px;height:14px;border:2px solid color-mix(in srgb, var(--color-bg) 35%, transparent);border-top-color:var(--color-bg);border-radius:50%;display:inline-block;animation:rp-spin .7s linear infinite"></span>
+              </sc-if>
+              <sc-if value="{{ notBusyStory }}" hint-placeholder-val="{{ true }}">Share My Story</sc-if>
+            </button>
+            <a class="btn btn-secondary" onClick="{{ cancelStory }}" style="cursor:pointer;padding:var(--space-3) var(--space-6);transition:transform .25s cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-2px)">Cancel</a>
+          </div>
+        </form>
+        <div class="blueprint" style="padding:var(--space-6)">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);margin-bottom:var(--space-4)">Sharing Guidelines</div>
+          <div style="display:grid;gap:var(--space-3);font-size:13px">
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)">Be respectful and supportive of others</div>
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)">Focus on your personal experience and recovery journey</div>
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)">Avoid giving medical advice</div>
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)">Remember that this is a safe space for sharing</div>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+  </main>
+
+  <footer style="border-top:1px solid var(--color-divider)">
+    <div style="max-width:1160px;margin:0 auto;padding:var(--space-8);display:grid;grid-template-columns:1.4fr 1fr;gap:var(--space-8)">
+      <p style="margin:0;font-size:13px;max-width:60ch;color:color-mix(in srgb, var(--color-text) 65%, transparent)">This tool is for informational purposes only. It does not replace professional medical or psychological advice. If you're in crisis, please contact a helpline or healthcare provider.</p>
+      <div>
+        <div style="font-family:var(--font-heading);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);margin-bottom:var(--space-3)">About</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);font-size:13px">
+          <div>
+            <div style="font-family:var(--font-heading);font-size:16px">Oshin Mehta</div>
+            <div style="color:color-mix(in srgb, var(--color-text) 65%, transparent)">7290805555</div>
+            <div style="color:color-mix(in srgb, var(--color-text) 65%, transparent)">oshinmehta13@gmail.com</div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-heading);font-size:16px">Udayan Sethi</div>
+            <div style="color:color-mix(in srgb, var(--color-text) 65%, transparent)">8587064023</div>
+            <div style="color:color-mix(in srgb, var(--color-text) 65%, transparent)">udayan.sethi11@gmail.com</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;explore&quot;,&quot;detail&quot;,&quot;quiz&quot;,&quot;results&quot;,&quot;dash&quot;,&quot;track&quot;,&quot;cal&quot;,&quot;entryForm&quot;,&quot;goals&quot;,&quot;goalForm&quot;,&quot;stories&quot;,&quot;storyForm&quot;,&quot;login&quot;,&quot;register&quot;],&quot;default&quot;:&quot;home&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;startLoggedIn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;seedDemoData&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+class Component extends DCLogic {
+  T = [
+    ["Alcohol","alcohol","Substance","AL","Alcohol use disorder affects millions. Understanding your relationship with alcohol is the first step toward positive change.",["How often do you drink alcohol?","Do you drink more than you intended?","Have you tried to cut down but couldn't?","Does drinking interfere with work or relationships?","Do you need to drink more to get the same effect?"]],
+    ["Social Media & Screens","social-media","Behavioral","SM","Excessive screen time and social media use can impact mental health, sleep, and daily functioning.",["How many hours per day do you spend on screens?","Do you feel anxious when you can't check social media?","Does screen use interfere with sleep or work?","Have you tried to reduce screen time but struggled?","Do you prioritize screens over in-person activities?"]],
+    ["Gaming","gaming","Behavioral","GA","Video game addiction can affect academics, relationships, and overall wellbeing. Acknowledging patterns is key.",["How many hours per day do you spend gaming?","Do you neglect other activities to game?","Do you feel irritable when you can't play?","Have relationships or work been affected by gaming?","Do you use gaming to escape stress or negative feelings?"]],
+    ["Smoking / Nicotine","smoking","Substance","SN","Nicotine dependence is one of the most common addictions. Understanding your use can guide your quit journey.",["How many cigarettes or vapes per day?","Do you feel strong cravings when you can't use nicotine?","Have you tried to quit before?","Does nicotine use affect your health or budget?","Do you use nicotine within 30 minutes of waking?"]],
+    ["Shopping / Spending","shopping","Behavioral","SS","Compulsive buying can lead to financial stress and emotional distress. Recognizing triggers helps regain control.",["Do you shop to relieve stress or negative emotions?","Have you spent more than you can afford?","Do you feel guilty after shopping?","Does shopping interfere with financial goals?","Do you hide purchases from others?"]],
+    ["Food / Eating","food","Health","FE","Emotional or compulsive eating can affect physical and mental health. Building awareness is the first step.",["Do you eat when not hungry to cope with emotions?","Do you feel out of control around food?","Does eating affect your self-esteem or body image?","Have you tried diets or restrictions that didn't work?","Does food dominate your thoughts?"]],
+    ["Caffeine","caffeine","Substance","CA","High caffeine intake can cause anxiety, sleep issues, and dependence. Understanding your intake helps balance it.",["How many caffeinated drinks per day?","Do you get headaches without caffeine?","Does caffeine affect your sleep?","Do you feel you need caffeine to function?","Have you tried to cut back but struggled?"]],
+    ["Marijuana / Cannabis","marijuana","Substance","MC","Cannabis use can become problematic when it interferes with daily life, relationships, or responsibilities.",["How often do you use marijuana?","Do you use more than you intended?","Have you tried to cut down or stop?","Does cannabis interfere with work or school?","Do you experience withdrawal symptoms?"]],
+    ["Opioids / Painkillers","opioids","Substance","OP","Opioid dependence is serious and can develop from prescription medications. Professional help is often needed.",["How often do you use opioids or painkillers?","Do you take more than prescribed?","Do you experience withdrawal symptoms?","Has opioid use affected your health or relationships?","Do you continue using despite negative consequences?"]],
+    ["Cocaine / Stimulants","cocaine","Substance","CS","Stimulant use can create intense dependence and health risks. Recovery is possible with support.",["How often do you use stimulants?","Do you use more than planned?","Do you experience crashes or withdrawal?","Has stimulant use affected your work or relationships?","Do you continue using despite health concerns?"]],
+    ["Gambling","gambling","Behavioral","GB","Problem gambling can lead to financial ruin and emotional distress. Recognizing patterns is crucial.",["How often do you gamble?","Do you chase losses by gambling more?","Have you lied about gambling to others?","Does gambling affect your finances or work?","Do you feel restless when not gambling?"]],
+    ["Pornography / Sexual Content","pornography","Behavioral","PS","Excessive pornography use can impact relationships and mental health. Building healthy habits is key.",["How much time do you spend on pornography?","Do you feel compelled to view more extreme content?","Does it interfere with real relationships?","Have you tried to reduce but struggled?","Do you use it to cope with stress or emotions?"]],
+    ["Work / Career","work","Behavioral","WC","Workaholism can lead to burnout, health issues, and strained relationships. Balance is essential.",["How many hours do you work per week?","Do you work when you're supposed to be relaxing?","Does work interfere with personal relationships?","Do you feel guilty when not working?","Has work affected your physical or mental health?"]],
+    ["Internet / Online Activities","internet","Behavioral","IO","Excessive internet use beyond social media can impact productivity and social connections.",["How many hours daily on non-work internet?","Do you lose track of time online?","Does internet use interfere with responsibilities?","Do you feel anxious when offline?","Have you tried to limit internet use?"]],
+    ["Sugar / Sweets","sugar","Health","SU","Sugar addiction can affect energy levels, weight, and overall health. Mindful eating helps.",["How often do you crave sugary foods?","Do you eat sweets when not hungry?","Do you experience sugar crashes?","Has sugar intake affected your health?","Do you hide your sugar consumption?"]],
+    ["Exercise","exercise","Health","EX","While exercise is healthy, excessive exercise can become compulsive and harmful to health.",["How many hours do you exercise daily?","Do you exercise when injured or sick?","Does missing exercise cause anxiety?","Has exercise affected your social life?","Do you prioritize exercise over other activities?"]],
+    ["Love / Relationships","love","Behavioral","LR","Love addiction involves unhealthy attachment patterns that can prevent fulfilling relationships.",["Do you stay in unhealthy relationships?","Do you fear being alone?","Do you idealize partners unrealistically?","Have relationships affected your independence?","Do you repeat unhealthy relationship patterns?"]]
+  ];
+
+  seedStories = {
+    caffeine: [
+      { t: "Breaking the anxiety cycle", a: "Anonymous", d: "July 18, 2026", c: "I thought caffeine helped my focus, but it was making my anxiety worse. I'd get jittery, have panic attacks, and then drink more coffee to 'calm down.' Breaking the cycle was hard - the headaches were intense. Now I drink herbal tea and my anxiety is manageable. I can think clearly without the constant buzz." },
+      { t: "A strict cutoff time", a: "Priya", d: "June 02, 2026", c: "Caffeine after 2 PM ruined my sleep. I'd toss and turn for hours, then be exhausted the next day. It became a vicious cycle. I set a strict cutoff time and switched to caffeine-free alternatives. Now I sleep soundly and wake up refreshed. My mood, energy, and concentration have all improved dramatically." }
+    ],
+    sugar: [
+      { t: "Eating in secret", a: "Anonymous", d: "May 26, 2026", c: "I ate sweets in secret, feeling ashamed afterward. The sugar high was my escape from stress. But it was affecting my health - weight gain, blood sugar issues. Learning about sugar's effect on dopamine helped me understand the addiction. Now I eat mindfully and find other ways to cope with stress. My relationship with food is healthy." }
+    ],
+    exercise: [
+      { t: "The injury that made me stop", a: "Rohit", d: "April 09, 2026", c: "I tore my Achilles tendon from overtraining. The injury forced me to rest and reflect. I realized exercise was my coping mechanism for body image issues and anxiety. Therapy helped me develop a healthy relationship with movement. Now I exercise moderately and focus on overall wellness. I'm stronger mentally and physically." }
+    ],
+    gambling: [
+      { t: "Bankruptcy was my wake-up call", a: "Anonymous", d: "March 14, 2026", c: "I owned a successful business but lost it all to online poker. I'd stay up all night playing, make irrational decisions, and neglect my work. The highs of winning and lows of losing were addictive. Bankruptcy was my wake-up call. Now I have a new business and healthy hobbies. Poker taught me about risk, but real life offers better rewards." }
+    ],
+    "social-media": [
+      { t: "My worth isn't a follower count", a: "Meera", d: "February 21, 2026", c: "I was obsessed with building my 'personal brand' on Instagram. Posting, engaging, analyzing metrics - it consumed my life. I neglected my relationships and my own mental health. Realizing that my worth isn't measured in followers was a turning point. Now I focus on real connections and experiences. Social media is a tool, not my identity." }
+    ]
+  };
+
+  seedGoals = [
+    { id: 1, slug: "alcohol", title: "Stay sober for 30 days", description: "No alcohol at all this month, including social events and weekends away.", type: "abstinence", target: "30 days", targetDate: "September 30, 2026", created: "Sep 01, 2026", notes: "Told two friends so they can check in on me.", done: false },
+    { id: 2, slug: "alcohol", title: "Replace Friday drinks with a run", description: "Swap the standing Friday bar night for a 5K along the river.", type: "behavioral", target: "", targetDate: "", created: "Aug 12, 2026", notes: "Three weeks in a row so far.", done: true, completed: "Aug 30, 2026" }
+  ];
+
+  seedEntries = [
+    { id: 1, slug: "alcohol", date: "2026-09-03", type: "progress", description: "Turned down drinks at a work dinner and stayed for dessert instead.", quantity: "", severity: 1, notes: "" },
+    { id: 2, slug: "alcohol", date: "2026-09-08", type: "trigger", description: "Strong urge after a hard call with my manager.", quantity: "", severity: 3, notes: "Walked for twenty minutes and it passed." },
+    { id: 3, slug: "alcohol", date: "2026-09-12", type: "relapse", description: "Two drinks at a birthday party.", quantity: "2 drinks", severity: 4, notes: "Went alone and had no plan for what to hold." },
+    { id: 4, slug: "alcohol", date: "2026-09-20", type: "milestone", description: "One full week clear after the party.", quantity: "", severity: 1, notes: "" }
+  ];
+
+  seedResults = [
+    { slug: "caffeine", score: 13, date: "Aug 24, 2026" },
+    { slug: "social-media", score: 22, date: "Aug 11, 2026" }
+  ];
+
+  state = { screen: null, auth: null, slug: "alcohol", search: "", cat: "", answers: {}, results: null, goals: null, entries: null, stories: null, year: 2026, month: 9, flash: null, editId: null, form: {}, story: {}, busy: null };
+  reduceMotion = false;
+  componentDidMount() {
+    this.reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }
+  tilt = e => {
+    if (this.reduceMotion) return;
+    const el = e.currentTarget, r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
+    el.style.transform = "perspective(900px) rotateX(" + (-py * 5).toFixed(2) + "deg) rotateY(" + (px * 5).toFixed(2) + "deg) translateY(-3px)";
+  };
+  untilt = e => { e.currentTarget.style.transform = ""; };
+  runAction(key, fn) {
+    const delay = this.reduceMotion ? 0 : 480;
+    this.setState({ busy: key });
+    const done = () => { this.setState({ busy: null }); fn(); };
+    if (delay) setTimeout(done, delay); else done();
+  }
+
+  // â”€â”€ resolved state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  seeded() { return this.props.seedDemoData !== false; }
+  screen() { return this.state.screen ?? (this.props.startScreen || "home"); }
+  auth() { return this.state.auth ?? (this.props.startLoggedIn === true); }
+  results() { return this.state.results ?? (this.seeded() ? this.seedResults : []); }
+  goals() { return this.state.goals ?? (this.seeded() ? this.seedGoals : []); }
+  entries() { return this.state.entries ?? (this.seeded() ? this.seedEntries : []); }
+  stories() { return this.state.stories ?? (this.seeded() ? this.seedStories : {}); }
+
+  list() {
+    return this.T.map((t, i) => ({
+      name: t[0], slug: t[1], category: t[2], code: t[3], description: t[4], questions: t[5],
+      num: String(i + 1).padStart(2, "0")
+    }));
+  }
+  cur() { return this.list().find(t => t.slug === this.state.slug) || this.list()[0]; }
+  sev(score) {
+    if (score <= 10) return { level: "low", label: "Low", tips: ["Stay mindful of your habits.", "Set small limits to maintain balance.", "Find healthy alternatives for stress relief."], professional: "No professional support needed at this time. Keep monitoring." };
+    if (score <= 20) return { level: "moderate", label: "Moderate", tips: ["Consider setting clear boundaries.", "Identify triggers and plan coping strategies.", "Talk to a trusted friend or family member.", "Try mindfulness or meditation."], professional: "Consider speaking with a counselor or support group." };
+    return { level: "high", label: "High", tips: ["Reach out for professional support.", "National helplines are available 24/7.", "Consider therapy or structured support programs.", "Share your goals with someone you trust."], professional: "We strongly recommend consulting a healthcare provider or addiction specialist. National helpline (US): 1-800-662-4357 (SAMHSA)." };
+  }
+
+  go(screen, extra) { this.setState({ screen, flash: null, ...(extra || {}) }); }
+  gated(screen, extra) {
+    if (!this.auth()) return this.setState({ screen: "login", flash: "Please log in to continue." });
+    this.go(screen, extra);
+  }
+  fmt(iso) {
+    const m = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const p = String(iso).split("-");
+    return m[Number(p[1]) - 1] + " " + p[2];
+  }
+  typeMark(t) { return { relapse: "R", trigger: "T", progress: "P", milestone: "M" }[t] || "Â·"; }
+
+  monthCells() {
+    const { year, month } = this.state;
+    const first = new Date(year, month - 1, 1);
+    const start = (first.getDay() + 6) % 7;
+    const days = new Date(year, month, 0).getDate();
+    const byDay = {};
+    this.entries().filter(e => e.slug === this.state.slug).forEach(e => {
+      const p = e.date.split("-");
+      if (Number(p[0]) === year && Number(p[1]) === month) byDay[Number(p[2])] = e;
+    });
+    const cells = [];
+    for (let i = 0; i < start; i++) cells.push(null);
+    for (let d = 1; d <= days; d++) cells.push(d);
+    while (cells.length % 7) cells.push(null);
+    const weeks = [];
+    for (let i = 0; i < cells.length; i += 7) {
+      weeks.push({
+        key: "w" + i,
+        days: cells.slice(i, i + 7).map((d, j) => {
+          const e = d ? byDay[d] : null;
+          return {
+            key: "d" + i + "-" + j, day: d ? String(d) : "", filled: !!d, entry: !!e,
+            mark: e ? this.typeMark(e.type) : "", label: e ? e.type.toUpperCase() : "",
+            qty: e && e.quantity ? e.quantity : "",
+            open: e ? () => this.setState({ screen: "entryForm", editId: e.id, form: { ...e }, flash: null }) : () => {}
+          };
+        })
+      });
+    }
+    return { weeks, byDay };
+  }
+
+  renderVals() {
+    const s = this.state, screen = this.screen(), auth = this.auth(), all = this.list(), cur = this.cur();
+    const stories = this.stories(), entries = this.entries(), goals = this.goals(), results = this.results();
+    const q = (s.search || "").toLowerCase();
+    const topics = all.filter(t => (!s.cat || t.category === s.cat) && (!q || t.name.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)))
+      .map((t, i) => ({ ...t, short: t.description.length > 120 ? t.description.slice(0, 120) + "..." : t.description, open: () => this.go("detail", { slug: t.slug }), delay: Math.min(i, 8) * 0.05 + "s" }));
+    const curStories = (stories[cur.slug] || []).map((x, i) => ({ ...x, key: cur.slug + i, delay: i * 0.08 + "s" }));
+    const mine = entries.filter(e => e.slug === s.slug);
+    const cal = this.monthCells();
+    const monthName = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][s.month - 1];
+    const answered = Object.keys(s.answers).length;
+    const score = Object.values(s.answers).reduce((a, b) => a + b, 0);
+    const shownResult = results.find(r => r.slug === s.slug) || { slug: s.slug, score: score, date: "Today" };
+    const sev = this.sev(shownResult.score);
+    const slugGoals = goals.filter(g => g.slug === s.slug);
+    const active = goals.filter(g => !g.done), completed = goals.filter(g => g.done);
+    const editing = s.editId != null;
+    const sheets = { home: "Sheet 01 â€” Home", explore: "Sheet 02 â€” Index", detail: "Sheet 03 â€” Topic", quiz: "Sheet 04 â€” Questionnaire", results: "Sheet 05 â€” Results", dash: "Sheet 06 â€” Record", track: "Sheet 07 â€” Tracking", cal: "Sheet 08 â€” Calendar", entryForm: "Sheet 09 â€” Entry", goals: "Sheet 10 â€” Goals", goalForm: "Sheet 11 â€” Goal", stories: "Sheet 12 â€” Stories", storyForm: "Sheet 13 â€” Share", login: "Sheet 14 â€” Log In", register: "Sheet 15 â€” Sign Up" };
+
+    const setField = k => e => this.setState({ form: { ...this.state.form, [k]: e.target.value } });
+    const setStory = k => e => this.setState({ story: { ...this.state.story, [k]: e.target.value } });
+
+    return {
+      sheet: sheets[screen] || "Recovery Path", auth, guest: !auth, flash: s.flash,
+      tilt: this.tilt, untilt: this.untilt,
+      busyLogin: s.busy === "login", notBusyLogin: s.busy !== "login",
+      busyRegister: s.busy === "register", notBusyRegister: s.busy !== "register",
+      busyQuiz: s.busy === "quiz", notBusyQuiz: s.busy !== "quiz",
+      busyEntry: s.busy === "entry", notBusyEntry: s.busy !== "entry",
+      busyGoal: s.busy === "goal", notBusyGoal: s.busy !== "goal",
+      busyStory: s.busy === "story", notBusyStory: s.busy !== "story",
+      isHome: screen === "home", isExplore: screen === "explore", isDetail: screen === "detail",
+      isQuiz: screen === "quiz", isResults: screen === "results", isDash: screen === "dash",
+      isTrack: screen === "track", isCal: screen === "cal", isEntryForm: screen === "entryForm",
+      isGoals: screen === "goals", isGoalForm: screen === "goalForm", isStories: screen === "stories",
+      isStoryForm: screen === "storyForm", isLogin: screen === "login", isRegister: screen === "register",
+
+      goHome: () => this.go("home"), goExplore: () => this.go("explore"), goLogin: () => this.go("login"),
+      goRegister: () => this.go("register"), goDash: () => this.gated("dash"), goTrack: () => this.gated("track"),
+      goDetail: () => this.go("detail"), goCal: () => this.gated("cal"), goGoals: () => this.gated("goals"),
+      goStories: () => this.go("stories"), goAddStory: () => this.gated("storyForm", { story: {} }),
+      noop: e => { if (e && e.preventDefault) e.preventDefault(); },
+      logout: () => this.setState({ screen: "home", auth: false, flash: "You have been logged out." }),
+      doLogin: e => { e.preventDefault(); this.runAction("login", () => this.setState({ auth: true, screen: "track", flash: "Welcome back. You're logged in." })); },
+      doRegister: e => { e.preventDefault(); this.runAction("register", () => this.setState({ auth: true, screen: "track", flash: "Account created. Welcome to Recovery Path." })); },
+
+      search: s.search, cat: s.cat,
+      setSearch: e => this.setState({ search: e.target.value }),
+      setCat: e => this.setState({ cat: e.target.value }),
+      topics, topicCount: String(topics.length) + " of " + all.length, noTopics: topics.length === 0,
+
+      cur, storyCount: String(curStories.length), storyPreview: curStories.slice(0, 2), curStories,
+      hasStories: curStories.length > 0, noStories: curStories.length === 0,
+
+      startQuiz: () => this.gated("quiz", { answers: {} }),
+      questions: cur.questions.map((text, i) => ({
+        key: cur.slug + i, num: String(i + 1).padStart(2, "0"), text, delay: i * 0.05 + "s",
+        opts: [1, 2, 3, 4, 5].map(v => ({
+          key: cur.slug + i + "-" + v, v: String(v), checked: s.answers[i] === v,
+          pick: () => this.setState({ answers: { ...this.state.answers, [i]: v } })
+        }))
+      })),
+      answeredLabel: answered + " / " + cur.questions.length + " answered",
+      progressPct: Math.round((answered / cur.questions.length) * 100) + "%",
+      quizReady: answered === cur.questions.length,
+      quizWaiting: answered !== cur.questions.length,
+      submitQuiz: e => {
+        if (e && e.preventDefault) e.preventDefault();
+        if (Object.keys(this.state.answers).length !== cur.questions.length) return;
+        this.runAction("quiz", () => {
+          const total = Object.values(this.state.answers).reduce((a, b) => a + b, 0);
+          const rest = this.results().filter(r => r.slug !== cur.slug);
+          this.setState({ results: [{ slug: cur.slug, score: total, date: "Sep 01, 2026" }, ...rest], screen: "results", flash: "Your responses were saved to your dashboard." });
+        });
+      },
+      res: { score: String(shownResult.score), max: "25", level: sev.label, professional: sev.professional, date: shownResult.date },
+      tips: sev.tips.map((t, i) => ({ key: "t" + i, num: String(i + 1).padStart(2, "0"), text: t, delay: i * 0.07 + "s" })),
+      markerLeft: Math.min(100, Math.round((shownResult.score / 25) * 100)) + "%",
+
+      pastResults: results.map(r => {
+        const t = all.find(x => x.slug === r.slug) || all[0];
+        const lv = this.sev(r.score);
+        return { key: r.slug, code: t.code, name: t.name, category: t.category, score: String(r.score), levelLabel: lv.label, date: r.date, open: () => this.go("results", { slug: r.slug }) };
+      }),
+      hasResults: results.length > 0, noResults: results.length === 0,
+
+      stats: { entries: String(entries.length), completed: String(completed.length), active: String(active.length) },
+      activeGoals: active.map(g => {
+        const t = all.find(x => x.slug === g.slug) || all[0];
+        return { ...g, key: "g" + g.id, topic: t.name, typeLabel: g.type.charAt(0).toUpperCase() + g.type.slice(1), hasTarget: !!g.target, hasDate: !!g.targetDate, manage: () => this.go("goals", { slug: g.slug }), track: () => this.go("cal", { slug: g.slug }) };
+      }),
+      hasActiveGoals: active.length > 0, noActiveGoals: active.length === 0,
+      recent: entries.slice().reverse().slice(0, 4).map(e => {
+        const t = all.find(x => x.slug === e.slug) || all[0];
+        return { key: "e" + e.id, date: this.fmt(e.date), type: e.type.charAt(0).toUpperCase() + e.type.slice(1), mark: this.typeMark(e.type), topic: t.name, description: e.description, qty: e.quantity, hasQty: !!e.quantity, dots: [1, 2, 3, 4, 5].map(i => ({ key: "e" + e.id + "d" + i, on: i <= e.severity, off: i > e.severity })), edit: () => this.setState({ screen: "entryForm", editId: e.id, form: { ...e }, flash: null }) };
+      }),
+      hasRecent: entries.length > 0, noRecent: entries.length === 0,
+
+      monthLabel: monthName + " " + s.year,
+      weeks: cal.weeks, dayHeads: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(d => ({ key: d, d })),
+      prevMonth: () => this.setState(st => ({ month: st.month === 1 ? 12 : st.month - 1, year: st.month === 1 ? st.year - 1 : st.year })),
+      nextMonth: () => this.setState(st => ({ month: st.month === 12 ? 1 : st.month + 1, year: st.month === 12 ? st.year + 1 : st.year })),
+      monthStats: {
+        days: String(Object.keys(cal.byDay).length),
+        relapse: String(Object.values(cal.byDay).filter(e => e.type === "relapse").length),
+        progress: String(Object.values(cal.byDay).filter(e => e.type === "progress").length)
+      },
+      calGoals: slugGoals.filter(g => !g.done).map(g => ({ ...g, key: "cg" + g.id, hasTarget: !!g.target, hasDate: !!g.targetDate })),
+      hasCalGoals: slugGoals.filter(g => !g.done).length > 0,
+
+      addEntry: () => this.setState({ screen: "entryForm", editId: null, form: { date: "2026-09-01", severity: 1 }, flash: null }),
+      entryTitle: editing ? "Edit " + cur.name + " Entry" : "Add " + cur.name + " Entry",
+      editingEntry: editing, newEntry: !editing,
+      form: { date: "", type: "", description: "", quantity: "", notes: "", title: "", targetDate: "", severity: 1, ...s.form },
+      setDate: setField("date"), setType: setField("type"), setDesc: setField("description"),
+      setQty: setField("quantity"), setNotes: setField("notes"),
+      sevOpts: [1, 2, 3, 4, 5].map(v => ({ key: "sv" + v, v: String(v), checked: Number(s.form.severity || 1) === v, pick: () => this.setState({ form: { ...this.state.form, severity: v } }) })),
+      saveEntry: e => {
+        e.preventDefault();
+        const f = this.state.form;
+        if (!f.date || !f.type || !f.description) return this.setState({ flash: "Date, entry type and description are required." });
+        this.runAction("entry", () => {
+          const list = this.entries();
+          if (this.state.editId != null) {
+            this.setState({ entries: list.map(x => x.id === this.state.editId ? { ...x, ...f, severity: Number(f.severity || 1) } : x), screen: "cal", editId: null, flash: "Entry updated." });
+          } else {
+            const id = Math.max(0, ...list.map(x => x.id)) + 1;
+            this.setState({ entries: [...list, { ...f, id, slug: this.state.slug, severity: Number(f.severity || 1) }], screen: "cal", flash: "Entry saved to your calendar." });
+          }
+        });
+      },
+      deleteEntry: () => this.setState({ entries: this.entries().filter(x => x.id !== this.state.editId), screen: "cal", editId: null, flash: "Entry deleted." }),
+      cancelEntry: () => this.go("cal"),
+
+      slugGoals: slugGoals.map((g, i) => ({ ...g, key: "sg" + g.id, delay: i * 0.06 + "s", statusLabel: g.done ? "âœ“ Completed" : "In Progress", hasTarget: !!g.target, hasDate: !!g.targetDate, hasNotes: !!g.notes, open: g.done, running: !g.done, complete: () => this.setState({ goals: this.goals().map(x => x.id === g.id ? { ...x, done: true, completed: "Sep 01, 2026" } : x), flash: "Goal marked as completed." }), edit: () => this.setState({ screen: "goalForm", editId: g.id, form: { ...g }, flash: null }), remove: () => this.setState({ goals: this.goals().filter(x => x.id !== g.id), flash: "Goal deleted." }) })),
+      hasSlugGoals: slugGoals.length > 0, noSlugGoals: slugGoals.length === 0,
+      goalStats: { total: String(slugGoals.length), completed: String(slugGoals.filter(g => g.done).length), active: String(slugGoals.filter(g => !g.done).length), rate: (slugGoals.length ? (slugGoals.filter(g => g.done).length / slugGoals.length * 100).toFixed(1) : "0.0") + "%" },
+      addGoal: () => this.setState({ screen: "goalForm", editId: null, form: { type: "abstinence" }, flash: null }),
+      goalTitle: editing ? "Edit " + cur.name + " Goal" : "Add " + cur.name + " Goal",
+      editingGoal: editing, newGoal: !editing,
+      setTitle: setField("title"), setGoalDesc: setField("description"), setTargetDate: setField("targetDate"), setGoalType: setField("type"), setGoalNotes: setField("notes"),
+      saveGoal: e => {
+        e.preventDefault();
+        const f = this.state.form;
+        if (!f.title || !f.description) return this.setState({ flash: "A goal needs a title and a description." });
+        this.runAction("goal", () => {
+          const list = this.goals();
+          if (this.state.editId != null) {
+            this.setState({ goals: list.map(x => x.id === this.state.editId ? { ...x, ...f } : x), screen: "goals", editId: null, flash: "Goal updated." });
+          } else {
+            const id = Math.max(0, ...list.map(x => x.id)) + 1;
+            this.setState({ goals: [...list, { ...f, id, slug: this.state.slug, created: "Sep 01, 2026", done: false, type: f.type || "abstinence" }], screen: "goals", flash: "Goal created." });
+          }
+        });
+      },
+      cancelGoal: () => this.go("goals"),
+
+      story: { title: "", content: "", ...s.story }, setStoryTitle: setStory("title"), setStoryBody: setStory("content"),
+      saveStory: e => {
+        e.preventDefault();
+        const st = this.state.story;
+        if (!st.title || !st.content) return this.setState({ flash: "Give your story a title and some text." });
+        this.runAction("story", () => {
+          const map = this.stories();
+          this.setState({ stories: { ...map, [cur.slug]: [{ t: st.title, a: "You", d: "September 01, 2026", c: st.content }, ...(map[cur.slug] || [])] }, screen: "stories", story: {}, flash: "Thank you for sharing your story." });
+        });
+      },
+      cancelStory: () => this.go("stories")
+    };
+  }
+}
+</script>
+</body>
+</html>

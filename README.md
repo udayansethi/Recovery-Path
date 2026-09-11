@@ -6,7 +6,7 @@ A Flask web app that helps users explore addiction types, complete questionnaire
 
 - **User accounts** — Register, log in, and track your progress
 - **Addiction catalog** — Browse and search topics across Substance, Behavioral, and Health categories
-- **Questionnaires** — Answer 5 questions per topic (1–5 scale)
+- **Questionnaires** — Answer 10 questions per topic (1–5 scale)
 - **Personalized results** — Get tips and recommendations based on your score
 - **Dashboard** — View past questionnaire results
 - **Community Stories** — Read and share personal experiences and recovery journeys

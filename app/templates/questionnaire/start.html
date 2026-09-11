@@ -3,26 +3,45 @@
 {% block title %}Questionnaire: {{ addiction.name }} - Recovery Path{% endblock %}
 
 {% block content %}
-<section class="questionnaire-section">
-    <a href="{{ url_for('addictions.detail', slug=addiction.slug) }}" class="back-link">← Back to {{ addiction.name }}</a>
-    <h1>{{ addiction.name }} — Questionnaire</h1>
-    <p>Rate each statement from 1 (rarely/never) to 5 (very often/always). Be honest for the most accurate results.</p>
+<a href="{{ url_for('addictions.detail', slug=addiction.slug) }}" class="plainlink" style="display:inline-block;font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);transition:transform .25s cubic-bezier(.16,1,.3,1);margin-bottom:var(--space-6)">← Back to {{ addiction.name }}</a>
 
-    <form method="POST" action="{{ url_for('questionnaire.start', slug=addiction.slug) }}" id="questionnaire-form" class="questionnaire-form">
-        {% for q in questions %}
-            <div class="question-block">
-                <label for="q_{{ q.id }}">{{ q.text }}</label>
-                <div class="scale-options">
-                    {% for i in range(1, 6) %}
-                        <label class="scale-option">
-                            <input type="radio" name="q_{{ q.id }}" value="{{ i }}" required>
-                            <span>{{ i }}</span>
-                        </label>
-                    {% endfor %}
-                </div>
-            </div>
-        {% endfor %}
-        <button type="submit" class="btn btn-primary btn-lg">Get Results</button>
-    </form>
+<section style="display:flex;justify-content:space-between;align-items:flex-end;gap:var(--space-8);border-bottom:1px solid var(--color-divider);padding:var(--space-6) 0;animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+    <div>
+        <div class="eyebrow">{{ addiction.name[:2]|upper }} — Questionnaire</div>
+        <h1 style="margin:0 0 var(--space-2)">{{ addiction.name }} — Questionnaire</h1>
+        <p style="margin:0;max-width:62ch;color:color-mix(in srgb, var(--color-text) 74%, transparent)">Rate each statement from 1 (rarely/never) to 5 (very often/always). Be honest for the most accurate results.</p>
+    </div>
 </section>
+
+<form method="POST" action="{{ url_for('questionnaire.start', slug=addiction.slug) }}" id="questionnaire-form">
+    <div style="display:flex;justify-content:space-between;font-size:11px;font-family:var(--font-heading);letter-spacing:0.14em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 50%, transparent);padding:var(--space-4) 0 0">
+        <span>Statement</span>
+        <span>1 = rarely / never &nbsp;·&nbsp; 5 = very often / always</span>
+    </div>
+
+    {% for q in questions %}
+        <div style="display:grid;grid-template-columns:1fr auto;gap:var(--space-6);align-items:center;border-top:1px solid var(--color-divider);padding:var(--space-4) 0;transition:background-color .25s ease;animation:rp-fade-up .4s cubic-bezier(.16,1,.3,1) {{ (loop.index0 * 0.05)|round(2) }}s both">
+            <div style="display:flex;gap:var(--space-4);align-items:baseline">
+                <span style="font-family:var(--font-heading);font-size:13px;color:var(--color-accent-400)">{{ "%02d"|format(loop.index) }}</span>
+                <label for="q_{{ q.id }}" style="font-size:17px;cursor:pointer">{{ q.text }}</label>
+            </div>
+            <div class="seg">
+                {% for i in range(1, 6) %}
+                    <label class="seg-opt" style="min-width:44px;justify-content:center;font-family:var(--font-heading);font-size:15px">
+                        <input type="radio" name="q_{{ q.id }}" id="q_{{ q.id }}_{{ i }}" value="{{ i }}" required>
+                        {{ i }}
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+    <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-6);display:flex;gap:var(--space-4);align-items:center">
+        <button type="submit" class="btn btn-primary blueprint ha" style="padding:var(--space-3) var(--space-6);font-size:15px">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            Get Results
+        </button>
+        <span style="font-size:13px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">Answer every statement to see your score.</span>
+    </div>
+</form>
 {% endblock %}

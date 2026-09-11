@@ -3,127 +3,90 @@
 {% block title %}{{ addiction.name }} Tracking Calendar - Recovery Path{% endblock %}
 
 {% block content %}
-<section class="calendar-section">
-    <div class="calendar-header">
-        <a href="{{ url_for('tracking.dashboard') }}" class="back-link">← Back to Dashboard</a>
-        <div class="calendar-title">
-            <span class="addiction-category">{{ addiction.category }}</span>
-            <h1>{{ addiction.name }} — Tracking Calendar</h1>
-        </div>
-        <div class="calendar-actions">
-            <a href="{{ url_for('tracking.add_entry', slug=addiction.slug) }}" class="btn btn-primary">Add Entry</a>
-            <a href="{{ url_for('tracking.goals', slug=addiction.slug) }}" class="btn btn-secondary">Manage Goals</a>
-        </div>
+<a href="{{ url_for('tracking.dashboard') }}" class="plainlink" style="display:inline-block;font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);transition:transform .25s cubic-bezier(.16,1,.3,1);margin-bottom:var(--space-6)">← Back to Dashboard</a>
+
+<section style="display:flex;justify-content:space-between;align-items:flex-end;gap:var(--space-8);border-bottom:1px solid var(--color-divider);padding:var(--space-6) 0;animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+    <div>
+        <span class="tag tag-accent">{{ addiction.category }}</span>
+        <h1 style="margin:var(--space-3) 0 0">{{ addiction.name }} — Tracking Calendar</h1>
     </div>
-
-    <!-- Month Navigation -->
-    <div class="calendar-navigation">
-        <a href="{{ url_for('tracking.addiction_calendar', slug=addiction.slug, year=year, month=month-1 if month > 1 else 12, **({'year': year-1} if month == 1 else {})) }}" class="nav-btn">‹ Previous</a>
-        <h2>{{ month_name }} {{ year }}</h2>
-        <a href="{{ url_for('tracking.addiction_calendar', slug=addiction.slug, year=year, month=month+1 if month < 12 else 1, **({'year': year+1} if month == 12 else {})) }}" class="nav-btn">Next ›</a>
+    <div style="display:flex;gap:var(--space-3)">
+        <a href="{{ url_for('tracking.add_entry', slug=addiction.slug) }}" class="btn btn-primary blueprint ha" style="padding:var(--space-2) var(--space-6)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            Add Entry
+        </a>
+        <a href="{{ url_for('tracking.goals', slug=addiction.slug) }}" class="btn btn-secondary hp" style="padding:var(--space-2) var(--space-6)">Manage Goals</a>
     </div>
+</section>
 
-    <!-- Calendar Grid -->
-    <div class="calendar-grid">
-        <!-- Day headers -->
-        {% for day in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] %}
-            <div class="calendar-day-header">{{ day }}</div>
-        {% endfor %}
+<section style="display:grid;grid-template-columns:1fr 300px;gap:var(--space-8);align-items:start;padding-top:var(--space-8)">
+    <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:var(--space-4)">
+            <a href="{{ url_for('tracking.addiction_calendar', slug=addiction.slug, year=year if month > 1 else year-1, month=month-1 if month > 1 else 12) }}" class="btn btn-secondary hp">‹ Previous</a>
+            <h2 style="margin:0;font-size:26px">{{ month_name }} {{ year }}</h2>
+            <a href="{{ url_for('tracking.addiction_calendar', slug=addiction.slug, year=year if month < 12 else year+1, month=month+1 if month < 12 else 1) }}" class="btn btn-secondary hp">Next ›</a>
+        </div>
 
-        <!-- Calendar cells -->
-        {% for week in calendar %}
-            {% for day in week %}
-                {% if day == 0 %}
-                    <div class="calendar-day empty"></div>
-                {% else %}
-                    <div class="calendar-day {% if entry_dates.get(day) %}has-entry entry-{{ entry_dates.get(day).entry_type }}{% endif %}">
-                        <div class="day-number">{{ day }}</div>
-                        {% if entry_dates.get(day) %}
-                            <div class="day-entries">
-                                <div class="entry-indicator" title="{{ entry_dates.get(day).entry_type|title }}: {{ entry_dates.get(day).description or 'No description' }}">
-                                    {% if entry_dates.get(day).entry_type == 'relapse' %}
-                                        ⚠️
-                                    {% elif entry_dates.get(day).entry_type == 'trigger' %}
-                                        🚨
-                                    {% elif entry_dates.get(day).entry_type == 'progress' %}
-                                        ✅
-                                    {% elif entry_dates.get(day).entry_type == 'milestone' %}
-                                        🎯
-                                    {% endif %}
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);border-left:1px solid var(--color-divider);border-top:1px solid var(--color-divider);animation:rp-fade-in .4s ease both">
+            {% for day in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] %}
+                <div style="border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);padding:6px 8px;font-family:var(--font-heading);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ day }}</div>
+            {% endfor %}
+
+            {% for week in calendar %}
+                {% for day in week %}
+                    <div style="border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);min-height:86px;padding:6px 8px;position:relative;transition:background-color .25s ease;{% if day != 0 and entry_dates.get(day) %}cursor:pointer{% endif %}" {% if day != 0 and entry_dates.get(day) %}onclick="location.href='{{ url_for('tracking.edit_entry', entry_id=entry_dates.get(day).id) }}'"{% endif %}>
+                        {% if day != 0 %}
+                            <div style="font-family:var(--font-heading);font-size:15px;color:color-mix(in srgb, var(--color-text) 65%, transparent)">{{ day }}</div>
+                            {% if entry_dates.get(day) %}
+                                {% set entry = entry_dates.get(day) %}
+                                {% set mark = {'relapse': 'R', 'trigger': 'T', 'progress': 'P', 'milestone': 'M'}.get(entry.entry_type, '·') %}
+                                <div style="padding-top:6px;display:grid;gap:4px;justify-items:start">
+                                    <span style="width:26px;height:26px;border:1px solid var(--color-accent);background:var(--color-accent-100);display:grid;place-items:center;font-family:var(--font-heading);font-size:13px;color:var(--color-accent-800);transition:transform .25s cubic-bezier(.34,1.56,.64,1)">{{ mark }}</span>
+                                    <span style="font-size:10px;letter-spacing:0.08em;font-family:var(--font-heading);color:var(--color-accent-700)">{{ entry.entry_type|upper }}</span>
                                 </div>
-                                {% if entry_dates.get(day).quantity %}
-                                    <div class="entry-quantity">{{ entry_dates.get(day).quantity }}</div>
-                                {% endif %}
-                            </div>
-                            <a href="{{ url_for('tracking.edit_entry', entry_id=entry_dates.get(day).id) }}" class="day-link" title="Edit entry"></a>
+                            {% endif %}
                         {% endif %}
                     </div>
-                {% endif %}
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-    </div>
+        </div>
 
-    <!-- Legend -->
-    <div class="calendar-legend">
-        <h3>Entry Types</h3>
-        <div class="legend-items">
-            <div class="legend-item">
-                <span class="legend-color relapse"></span>
-                <span>Relapse</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-color trigger"></span>
-                <span>Trigger</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-color progress"></span>
-                <span>Progress</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-color milestone"></span>
-                <span>Milestone</span>
+        <div style="display:flex;gap:var(--space-8);align-items:center;padding-top:var(--space-6)">
+            <span class="eyebrow klein">Entry Types</span>
+            <div style="display:flex;gap:var(--space-6);font-size:13px">
+                <span style="display:flex;gap:8px;align-items:center"><span style="width:18px;height:18px;border:1px solid var(--color-accent);display:grid;place-items:center;font-family:var(--font-heading);font-size:11px">R</span>Relapse</span>
+                <span style="display:flex;gap:8px;align-items:center"><span style="width:18px;height:18px;border:1px solid var(--color-accent);display:grid;place-items:center;font-family:var(--font-heading);font-size:11px">T</span>Trigger</span>
+                <span style="display:flex;gap:8px;align-items:center"><span style="width:18px;height:18px;border:1px solid var(--color-accent);display:grid;place-items:center;font-family:var(--font-heading);font-size:11px">P</span>Progress</span>
+                <span style="display:flex;gap:8px;align-items:center"><span style="width:18px;height:18px;border:1px solid var(--color-accent);display:grid;place-items:center;font-family:var(--font-heading);font-size:11px">M</span>Milestone</span>
             </div>
         </div>
     </div>
 
-    <!-- Active Goals -->
-    {% if goals %}
-        <div class="active-goals">
-            <h3>Active Goals for {{ addiction.name }}</h3>
-            <div class="goals-summary">
+    <div style="display:grid;gap:var(--space-6)">
+        <div class="blueprint" style="padding:var(--space-6);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="eyebrow klein">This Month's Activity</div>
+            <div style="display:grid;gap:var(--space-3);font-size:14px">
+                <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-2)"><span>Days with entries</span><span style="font-family:var(--font-heading);font-size:20px">{{ entry_dates|length }}</span></div>
+                <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-2)"><span>Relapse days</span><span style="font-family:var(--font-heading);font-size:20px">{{ entry_dates.values()|selectattr('entry_type', 'equalto', 'relapse')|list|length }}</span></div>
+                <div style="display:flex;justify-content:space-between"><span>Progress days</span><span style="font-family:var(--font-heading);font-size:20px">{{ entry_dates.values()|selectattr('entry_type', 'equalto', 'progress')|list|length }}</span></div>
+            </div>
+        </div>
+
+        {% if goals %}
+            <div>
+                <h3 style="margin:0 0 var(--space-3);font-size:20px">Active Goals for {{ addiction.name }}</h3>
                 {% for goal in goals %}
-                    <div class="goal-summary">
-                        <h4>{{ goal.title }}</h4>
-                        <p>{{ goal.description or "No description" }}</p>
-                        {% if goal.target_value %}
-                            <p><strong>Target:</strong> {{ goal.target_value }}</p>
-                        {% endif %}
+                    <div style="border-top:1px solid var(--color-divider);padding:var(--space-3) 0">
+                        <div style="font-family:var(--font-heading);font-size:17px">{{ goal.title }}</div>
+                        <p style="margin:2px 0 0;font-size:13px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">{{ goal.description }}</p>
                         {% if goal.target_date %}
-                            <p><strong>Due:</strong> {{ goal.target_date.strftime('%B %d, %Y') }}</p>
+                            <div style="font-size:12px;color:color-mix(in srgb, var(--color-text) 60%, transparent);padding-top:4px">Due: {{ goal.target_date.strftime('%B %d, %Y') }}</div>
                         {% endif %}
                     </div>
                 {% endfor %}
             </div>
-        </div>
-    {% endif %}
-
-    <!-- Quick Stats -->
-    <div class="calendar-stats">
-        <h3>This Month's Activity</h3>
-        <div class="stats-grid">
-            <div class="stat-item">
-                <span class="stat-value">{{ entry_dates|length }}</span>
-                <span class="stat-label">Days with entries</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value">{{ entry_dates.values()|selectattr('entry_type', 'equalto', 'relapse')|list|length }}</span>
-                <span class="stat-label">Relapse days</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value">{{ entry_dates.values()|selectattr('entry_type', 'equalto', 'progress')|list|length }}</span>
-                <span class="stat-label">Progress days</span>
-            </div>
-        </div>
+        {% endif %}
     </div>
 </section>
 {% endblock %}

@@ -3,109 +3,182 @@
 {% block title %}My Recovery Dashboard - Recovery Path{% endblock %}
 
 {% block content %}
-<section class="dashboard-section">
-    <div class="dashboard-header">
-        <h1>My Recovery Dashboard</h1>
-        <p>Track your progress, manage goals, and stay committed to your recovery journey.</p>
+<section style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-6);animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+    <div>
+        <div class="eyebrow">Tracking</div>
+        <h1 style="margin:0 0 var(--space-2)">My Recovery Dashboard</h1>
+        <p style="margin:0;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Track your progress, manage goals, and stay committed to your recovery journey.</p>
     </div>
+</section>
 
-    <div class="dashboard-stats">
-        <div class="stat-card">
-            <div class="stat-number">{{ total_entries }}</div>
-            <div class="stat-label">Tracking Entries</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">{{ completed_goals }}</div>
-            <div class="stat-label">Completed Goals</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">{{ active_goals|length }}</div>
-            <div class="stat-label">Active Goals</div>
-        </div>
+<section style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-6);padding:var(--space-8) 0">
+    <div class="blueprint" style="padding:var(--space-6);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease;animation:rp-pop .5s cubic-bezier(.34,1.56,.64,1) both">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div style="font-family:var(--font-heading);font-size:56px;line-height:1;color:var(--color-accent-700)">{{ total_entries }}</div>
+        <div class="eyebrow klein" style="padding-top:var(--space-2)">Tracking Entries</div>
     </div>
-
-    <div class="dashboard-grid">
-        <div class="dashboard-section">
-            <h2>Active Goals</h2>
-            {% if active_goals %}
-                <div class="goals-list">
-                    {% for goal in active_goals %}
-                        <div class="goal-card {% if goal.is_completed %}completed{% endif %}">
-                            <div class="goal-header">
-                                <h3>{{ goal.title }}</h3>
-                                <span class="goal-type">{{ goal.goal_type|title }}</span>
-                            </div>
-                            <div class="goal-content">
-                                <p>{{ goal.description or "No description" }}</p>
-                                {% if goal.target_value %}
-                                    <p><strong>Target:</strong> {{ goal.target_value }}</p>
-                                {% endif %}
-                                {% if goal.target_date %}
-                                    <p><strong>Due:</strong> {{ goal.target_date.strftime('%B %d, %Y') }}</p>
-                                {% endif %}
-                            </div>
-                            <div class="goal-actions">
-                                <a href="{{ url_for('tracking.goals', slug=goal.addiction.slug) }}" class="btn btn-sm">Manage</a>
-                                <a href="{{ url_for('tracking.addiction_calendar', slug=goal.addiction.slug) }}" class="btn btn-sm btn-secondary">Track</a>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="empty-state">
-                    <p>You haven't set any goals yet.</p>
-                    <a href="{{ url_for('addictions.list_addictions') }}" class="btn btn-primary">Browse Addictions</a>
-                </div>
-            {% endif %}
-        </div>
-
-        <div class="dashboard-section">
-            <h2>Recent Activity (Last 7 Days)</h2>
-            {% if recent_entries %}
-                <div class="entries-list">
-                    {% for entry in recent_entries %}
-                        <div class="entry-card entry-{{ entry.entry_type }}">
-                            <div class="entry-header">
-                                <span class="entry-date">{{ entry.entry_date.strftime('%b %d') }}</span>
-                                <span class="entry-type">{{ entry.entry_type|title }}</span>
-                                <span class="entry-addiction">{{ entry.addiction.name }}</span>
-                            </div>
-                            <div class="entry-content">
-                                {% if entry.description %}
-                                    <p>{{ entry.description }}</p>
-                                {% endif %}
-                                {% if entry.quantity %}
-                                    <p><strong>Amount:</strong> {{ entry.quantity }}</p>
-                                {% endif %}
-                                <div class="severity-indicator">
-                                    <span>Severity: </span>
-                                    {% for i in range(5) %}
-                                        <span class="severity-dot {% if i < entry.severity %}active{% endif %}"></span>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            <div class="entry-actions">
-                                <a href="{{ url_for('tracking.edit_entry', entry_id=entry.id) }}" class="btn btn-xs">Edit</a>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="empty-state">
-                    <p>No recent activity. Start tracking your progress!</p>
-                    <a href="{{ url_for('addictions.list_addictions') }}" class="btn btn-primary">Start Tracking</a>
-                </div>
-            {% endif %}
-        </div>
+    <div class="blueprint" style="padding:var(--space-6);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease;animation:rp-pop .5s cubic-bezier(.34,1.56,.64,1) .08s both">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div style="font-family:var(--font-heading);font-size:56px;line-height:1;color:var(--color-accent-700)">{{ completed_goals }}</div>
+        <div class="eyebrow klein" style="padding-top:var(--space-2)">Completed Goals</div>
     </div>
+    <div class="blueprint" style="padding:var(--space-6);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease;animation:rp-pop .5s cubic-bezier(.34,1.56,.64,1) .16s both">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div style="font-family:var(--font-heading);font-size:56px;line-height:1;color:var(--color-accent-700)">{{ active_goals|length }}</div>
+        <div class="eyebrow klein" style="padding-top:var(--space-2)">Active Goals</div>
+    </div>
+</section>
 
-    <div class="dashboard-actions">
-        <h2>Quick Actions</h2>
-        <div class="action-buttons">
-            <a href="{{ url_for('addictions.list_addictions') }}" class="btn btn-primary">Browse All Addictions</a>
-            <a href="{{ url_for('questionnaire.start', slug='alcohol') }}" class="btn btn-secondary">Take Assessment</a>
-            <a href="{{ url_for('addictions.stories', slug='alcohol') }}" class="btn btn-secondary">Read Stories</a>
+<!-- AI Trigger Pattern Detective Card -->
+<section style="padding-bottom:var(--space-8)">
+    <div class="ai-advice-card blueprint" id="ai-pattern-card">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="ai-advice-header">
+            <div class="ai-advice-title">
+                <span>🔍</span> AI Trigger Pattern Detective &amp; Prevention Shield
+            </div>
+            <button type="button" id="ai-analyze-patterns-btn" class="ai-btn-action" onclick="analyzeMyPatterns()">
+                Analyze Weekly Patterns
+            </button>
+        </div>
+        <div id="ai-pattern-body">
+            <p style="margin:0;color:color-mix(in srgb, var(--color-text) 70%, transparent);font-size:13.5px">
+                Click "Analyze Weekly Patterns" to let AI examine your recent entries for hidden urge times, emotional triggers, and personalized guardrails.
+            </p>
         </div>
     </div>
 </section>
+
+<section style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-8);border-top:1px solid var(--color-divider);padding-top:var(--space-8)">
+    <div>
+        <h2 style="margin:0 0 var(--space-4)">Active Goals</h2>
+        {% if active_goals %}
+            <div style="display:grid;gap:var(--space-6)">
+                {% for goal in active_goals %}
+                    <div class="blueprint" style="padding:var(--space-4);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s ease;animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+                        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-3)">
+                            <h3 style="margin:0;font-size:20px">{{ goal.title }}</h3>
+                            <span class="tag tag-accent">{{ goal.goal_type|capitalize }}</span>
+                        </div>
+                        <p style="margin:var(--space-2) 0 0;font-size:14px;color:color-mix(in srgb, var(--color-text) 72%, transparent)">{{ goal.description or "No description" }}</p>
+                        <div style="display:flex;gap:var(--space-6);font-size:12px;padding-top:var(--space-3);color:color-mix(in srgb, var(--color-text) 60%, transparent)">
+                            {% if goal.target_value %}<span>Target: {{ goal.target_value }}</span>{% endif %}
+                            {% if goal.target_date %}<span>Due: {{ goal.target_date.strftime('%B %d, %Y') }}</span>{% endif %}
+                            <span>Topic: {{ goal.addiction.name }}</span>
+                        </div>
+                        <div style="display:flex;gap:var(--space-2);padding-top:var(--space-4)">
+                            <a href="{{ url_for('tracking.goals', slug=goal.addiction.slug) }}" class="btn btn-secondary hp" style="font-size:13px">Manage</a>
+                            <a href="{{ url_for('tracking.addiction_calendar', slug=goal.addiction.slug) }}" class="btn btn-secondary hp" style="font-size:13px">Track</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="blueprint empty-state" style="padding:var(--space-8);display:grid;justify-items:start;gap:var(--space-3)">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                <p style="margin:0;color:color-mix(in srgb, var(--color-text) 70%, transparent)">You haven't set any goals yet.</p>
+                <a href="{{ url_for('addictions.list_addictions') }}" class="btn btn-primary hp">Browse Addictions</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div>
+        <h2 style="margin:0 0 var(--space-4)">Recent Activity (Last 7 Days)</h2>
+        {% if recent_entries %}
+            <div style="display:grid;gap:0">
+                {% for entry in recent_entries %}
+                    <div style="border-top:1px solid var(--color-divider);padding:var(--space-4) 0;display:grid;grid-template-columns:40px 1fr auto;gap:var(--space-4);align-items:start;transition:padding-left .25s cubic-bezier(.16,1,.3,1),background-color .25s ease">
+                        <span style="width:34px;height:34px;border:1px solid var(--color-accent-400);display:grid;place-items:center;font-family:var(--font-heading);font-size:15px;color:var(--color-accent-700)">
+                            {% if entry.entry_type == 'relapse' %}R{% elif entry.entry_type == 'trigger' %}T{% elif entry.entry_type == 'progress' %}P{% elif entry.entry_type == 'milestone' %}M{% endif %}
+                        </span>
+                        <div>
+                            <div style="font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent)">
+                                {{ entry.entry_date.strftime('%b %d') }} · {{ entry.entry_type|capitalize }} · {{ entry.addiction.name }}
+                            </div>
+                            <p style="margin:4px 0 0;font-size:14px">{{ entry.description }}</p>
+                            {% if entry.quantity %}
+                                <div style="font-size:12px;color:color-mix(in srgb, var(--color-text) 60%, transparent)">Amount: {{ entry.quantity }}</div>
+                            {% endif %}
+                            <div style="display:flex;gap:4px;align-items:center;padding-top:8px">
+                                <span style="font-size:11px;font-family:var(--font-heading);letter-spacing:0.1em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 50%, transparent);margin-right:4px">Severity</span>
+                                {% for i in range(1, 6) %}
+                                    {% if i <= entry.severity %}
+                                        <span style="width:8px;height:8px;background:var(--color-accent);display:block"></span>
+                                    {% else %}
+                                        <span style="width:8px;height:8px;border:1px solid var(--color-neutral-400);display:block"></span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <a href="{{ url_for('tracking.edit_entry', entry_id=entry.id) }}" class="btn btn-secondary hp" style="font-size:13px">Edit</a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="blueprint empty-state" style="padding:var(--space-8);display:grid;justify-items:start;gap:var(--space-3)">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                <p style="margin:0;color:color-mix(in srgb, var(--color-text) 70%, transparent)">No recent activity. Start tracking your progress!</p>
+                <a href="{{ url_for('addictions.list_addictions') }}" class="btn btn-primary hp">Start Tracking</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<section style="border-top:1px solid var(--color-divider);margin-top:var(--space-8);padding-top:var(--space-6)">
+    <h2 style="margin:0 0 var(--space-4)">Quick Actions</h2>
+    <div style="display:flex;gap:var(--space-3);flex-wrap:wrap">
+        <a href="{{ url_for('addictions.list_addictions') }}" class="btn btn-primary blueprint ha" style="padding:var(--space-3) var(--space-6)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            Browse All Addictions
+        </a>
+        <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary hp" style="padding:var(--space-3) var(--space-6)">View Assessment Record</a>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function analyzeMyPatterns() {
+    const btn = document.getElementById("ai-analyze-patterns-btn");
+    const body = document.getElementById("ai-pattern-body");
+    if (!btn || !body) return;
+
+    btn.disabled = true;
+    btn.innerHTML = "Investigating...";
+    body.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 0;color:var(--color-accent-400);">
+            <div class="ai-typing-indicator"><div class="ai-msg-content"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></div>
+            <span>Analyzing your logged entries for triggers and patterns...</span>
+        </div>
+    `;
+
+    // Extract text from visible recent entries
+    let entriesSummary = "";
+    document.querySelectorAll(".main section").forEach(sec => {
+        entriesSummary += " " + sec.innerText;
+    });
+
+    try {
+        const response = await fetch("/api/ai/pattern-insights", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                entries_summary: entriesSummary.slice(0, 1000),
+                addiction_name: "Personal Tracking"
+            })
+        });
+
+        const data = await response.json();
+        const analysis = data.analysis || "Pattern analysis complete: Staying consistent with daily logs is your biggest strength.";
+        body.innerHTML = `<div class="ai-advice-content">${formatAIMarkdown(analysis)}</div>`;
+        btn.innerHTML = "Re-analyze Patterns";
+    } catch (err) {
+        body.innerHTML = `<p style="color:#f87171;margin:0;">Could not analyze patterns right now. Keep logging regularly.</p>`;
+        btn.innerHTML = "Retry";
+    } finally {
+        btn.disabled = false;
+    }
+}
+</script>
 {% endblock %}

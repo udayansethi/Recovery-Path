@@ -1,0 +1,65 @@
+<!-- SOS Craving De-escalator & 4-7-8 Urge Surfing Modal -->
+<div id="sos-modal-overlay" class="sos-modal-backdrop" style="display: none;" aria-hidden="true">
+    <div class="sos-modal-card blueprint" role="dialog" aria-labelledby="sos-title">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+
+        <div class="sos-modal-header">
+            <div class="sos-title-wrap">
+                <span class="sos-alert-badge">SOS EMERGENCY</span>
+                <h2 id="sos-title" class="sos-title">Craving De-escalation &amp; Urge Surfer</h2>
+            </div>
+            <button type="button" class="sos-close-btn" onclick="closeSOSModal()" aria-label="Close SOS Modal">&times;</button>
+        </div>
+
+        <div class="sos-modal-body">
+            <!-- 4-7-8 Breathing Circle -->
+            <div class="sos-breath-section">
+                <div class="sos-breath-circle-container">
+                    <div id="sos-breath-circle" class="sos-breath-circle">
+                        <span id="sos-breath-text">READY</span>
+                    </div>
+                </div>
+                <div class="sos-breath-instructions">
+                    <strong>4-7-8 Guided Breathing:</strong>
+                    <span id="sos-breath-phase">Click Start to begin calming your nervous system.</span>
+                </div>
+                <button type="button" id="sos-breath-toggle-btn" class="btn btn-primary" onclick="toggleBreathingGuide()">
+                    Start 4-7-8 Breathing
+                </button>
+            </div>
+
+            <!-- 3-Minute Urge Surfer Timer -->
+            <div class="sos-timer-card">
+                <div class="sos-timer-label">🌊 Urge Surfing Countdown (Cravings peak and subside in 15 mins)</div>
+                <div id="sos-timer-display" class="sos-timer-digits">03:00</div>
+                <div class="sos-timer-controls">
+                    <button type="button" id="sos-timer-btn" class="ai-chip" onclick="toggleUrgeTimer()">Start Timer</button>
+                    <button type="button" class="ai-chip" onclick="resetUrgeTimer()">Reset</button>
+                </div>
+            </div>
+
+            <!-- AI 5-4-3-2-1 Sensory Grounding Tool -->
+            <div class="sos-grounding-card">
+                <div class="sos-grounding-head">
+                    <strong>✦ AI 5-4-3-2-1 Sensory Reset</strong>
+                    <button type="button" id="sos-grounding-btn" class="ai-btn-action" onclick="fetchSOSGrounding()">
+                        Generate Grounding Steps
+                    </button>
+                </div>
+                <div id="sos-grounding-content" class="sos-grounding-text">
+                    Click "Generate Grounding Steps" to get immediate tailored sensory actions to disarm this craving.
+                </div>
+            </div>
+
+            <!-- Emergency 24/7 Lifeline Callout -->
+            <div class="sos-helpline-bar">
+                <span>In severe distress? Free 24/7 help:</span>
+                <div class="sos-helpline-links">
+                    <a href="tel:988" class="sos-phone-pill">📞 Call / Text 988</a>
+                    <a href="tel:18006624357" class="sos-phone-pill">1-800-662-4357 (SAMHSA)</a>
+                    <a href="sms:741741?body=HOME" class="sos-phone-pill">Text HOME to 741741</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

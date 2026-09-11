@@ -3,35 +3,118 @@
 {% block title %}Results: {{ addiction.name }} - Recovery Path{% endblock %}
 
 {% block content %}
-<section class="results-section">
-    <a href="{{ url_for('addictions.detail', slug=addiction.slug) }}" class="back-link">← Back to {{ addiction.name }}</a>
-    <h1>Your Results: {{ addiction.name }}</h1>
+<a href="{{ url_for('addictions.detail', slug=addiction.slug) }}" class="plainlink" style="display:inline-block;font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);transition:transform .25s cubic-bezier(.16,1,.3,1);margin-bottom:var(--space-6)">← Back to {{ addiction.name }}</a>
 
-    <div class="results-summary">
-        <div class="score-badge severity-{{ severity.level }}">
-            <span class="score-label">Score</span>
-            <span class="score-value">{{ total_score }}</span>
-            <span class="severity-label">{{ severity.level|capitalize }}</span>
+<h1 style="margin:0 0 var(--space-6);font-size:52px;animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">Your Results: {{ addiction.name }}</h1>
+
+<section style="display:grid;grid-template-columns:260px 1fr;gap:var(--space-8);align-items:start;border-top:1px solid var(--color-divider);padding-top:var(--space-8);animation:rp-fade-up .55s cubic-bezier(.16,1,.3,1) .08s both">
+    <div>
+        <div class="blueprint" style="padding:var(--space-6);text-align:center;transition:transform .35s cubic-bezier(.16,1,.3,1);animation:rp-pop .6s cubic-bezier(.34,1.56,.64,1) both">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="eyebrow klein">Score</div>
+            <div style="font-family:var(--font-heading);font-size:88px;line-height:1;color:var(--color-accent-700);animation:rp-pop .6s cubic-bezier(.34,1.56,.64,1) .1s both">{{ total_score }}</div>
+            <div style="font-size:12px;color:color-mix(in srgb, var(--color-text) 50%, transparent);margin-bottom:var(--space-3)">of 25</div>
+            <span class="tag tag-accent" style="font-size:12px">{{ severity.level|capitalize }}</span>
+        </div>
+        <div style="margin-top:var(--space-6)">
+            <div style="height:6px;border:1px solid var(--color-divider);position:relative;background:var(--color-surface)">
+                <span style="position:absolute;top:-5px;width:2px;height:14px;background:var(--color-accent);left:{{ ((total_score / 25 * 100)|round)|int }}%;animation:rp-marker 1s cubic-bezier(.16,1,.3,1) .3s both"></span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--font-heading);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 50%, transparent);padding-top:6px">
+                <span>Low</span>
+                <span>Moderate</span>
+                <span>High</span>
+            </div>
+            <div style="font-size:12px;color:color-mix(in srgb, var(--color-text) 55%, transparent);padding-top:var(--space-3)">Taken today</div>
         </div>
     </div>
 
-    <div class="results-content">
-        <h2>Personalized Tips</h2>
-        <ul class="tips-list">
+    <div>
+        <h2 style="margin:0 0 var(--space-4)">Personalized Tips</h2>
+        <ul style="display:grid;gap:0;list-style:none;padding:0;margin:0">
             {% for tip in severity.tips %}
-                <li>{{ tip }}</li>
+                <li style="display:grid;grid-template-columns:44px 1fr;gap:var(--space-3);border-top:1px solid var(--color-divider);padding:var(--space-3) 0;font-size:17px;animation:rp-fade-up .45s cubic-bezier(.16,1,.3,1) {{ (loop.index0 * 0.07)|round(2) }}s both">
+                    <span style="font-family:var(--font-heading);font-size:13px;color:var(--color-accent-400)">{{ "%02d"|format(loop.index) }}</span>
+                    <span>{{ tip }}</span>
+                </li>
             {% endfor %}
         </ul>
 
-        <div class="professional-note">
-            <strong>Professional Support</strong>
-            <p>{{ severity.professional }}</p>
+        <div class="blueprint" style="padding:var(--space-6);margin-top:var(--space-8);background:var(--color-accent-100);transition:transform .35s cubic-bezier(.16,1,.3,1);animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) .2s both">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div style="font-family:var(--font-heading);font-size:18px;color:var(--color-accent-800);margin-bottom:6px">Professional Support</div>
+            <p style="margin:0;font-size:15px;color:var(--color-accent-800)">{{ severity.professional }}</p>
         </div>
-    </div>
 
-    <div class="results-actions">
-        <a href="{{ url_for('addictions.list_addictions') }}" class="btn btn-outline">Explore Other Topics</a>
-        <a href="{{ url_for('addictions.detail', slug=addiction.slug) }}" class="btn btn-primary">Back to {{ addiction.name }}</a>
+        <!-- AI Personalized Advice Section -->
+        <div class="ai-advice-card blueprint" id="ai-results-card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="ai-advice-header">
+                <div class="ai-advice-title">
+                    <span>✦</span> AI Personalized Recovery Insights
+                </div>
+                <button type="button" id="get-ai-advice-btn" class="ai-btn-action" onclick="fetchAIResultsAdvice()">
+                    Generate AI Advice
+                </button>
+            </div>
+            <div id="ai-advice-body">
+                <p style="margin:0;color:color-mix(in srgb, var(--color-text) 70%, transparent);font-size:14px">
+                    Click "Generate AI Advice" to get customized action steps and coping techniques tailored to your assessment score.
+                </p>
+            </div>
+        </div>
+
+        <div style="display:flex;gap:var(--space-3);margin-top:var(--space-8)">
+
+            <a href="{{ url_for('addictions.list_addictions') }}" class="btn btn-secondary hp" style="padding:var(--space-3) var(--space-6)">Explore Other Topics</a>
+            <a href="{{ url_for('addictions.detail', slug=addiction.slug) }}" class="btn btn-primary blueprint ha" style="padding:var(--space-3) var(--space-6)">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                Back to {{ addiction.name }}
+            </a>
+        </div>
     </div>
 </section>
 {% endblock %}
+
+{% block scripts %}
+<script>
+async function fetchAIResultsAdvice() {
+    const btn = document.getElementById("get-ai-advice-btn");
+    const body = document.getElementById("ai-advice-body");
+    if (!btn || !body) return;
+
+    btn.disabled = true;
+    btn.innerHTML = "Generating...";
+    body.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;padding:12px 0;color:var(--color-accent-400);">
+            <div class="ai-typing-indicator"><div class="ai-msg-content"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></div>
+            <span>Analyzing your assessment with AI...</span>
+        </div>
+    `;
+
+    try {
+        const response = await fetch("/api/ai/assessment-advice", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                addiction_name: {{ addiction.name|tojson }},
+                total_score: {{ total_score }},
+                severity_level: {{ severity.level|tojson }},
+                answers_summary: "Completed self-assessment for {{ addiction.name }}."
+            })
+        });
+
+        const data = await response.json();
+        const advice = data.advice || "Unable to generate advice at this moment.";
+        body.innerHTML = `<div class="ai-advice-content">${formatAIMarkdown(advice)}</div>`;
+        btn.innerHTML = "Refresh Advice";
+    } catch (err) {
+        body.innerHTML = `<p style="color:#f87171;margin:0;">Could not connect to AI service. Please try again in a moment.</p>`;
+        btn.innerHTML = "Retry";
+    } finally {
+        btn.disabled = false;
+    }
+}
+</script>
+{% endblock %}
+

@@ -3,48 +3,46 @@
 {% block title %}Share Your Story - {{ addiction.name }} - Recovery Path{% endblock %}
 
 {% block content %}
-<section class="add-story-section">
-    <a href="{{ url_for('addictions.stories', slug=addiction.slug) }}" class="back-link">← Back to Stories</a>
+<a href="{{ url_for('addictions.stories', slug=addiction.slug) }}" class="plainlink" style="display:inline-block;font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);transition:transform .25s cubic-bezier(.16,1,.3,1);margin-bottom:var(--space-6)">← Back to Stories</a>
 
-    <div class="add-story-header">
-        <span class="addiction-category">{{ addiction.category }}</span>
-        <h1>Share Your {{ addiction.name }} Story</h1>
-        <p>Your experience can help others feel less alone. Share as much or as little as you're comfortable with.</p>
-    </div>
+<section style="border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-6);animation:rp-fade-up .5s cubic-bezier(.16,1,.3,1) both">
+    <span class="tag tag-accent">{{ addiction.category }}</span>
+    <h1 style="margin:var(--space-3) 0 var(--space-2)">Share Your {{ addiction.name }} Story</h1>
+    <p style="margin:0;max-width:62ch;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Your experience can help others feel less alone. Share as much or as little as you're comfortable with.</p>
+</section>
 
-    <form method="POST" action="{{ url_for('addictions.add_story', slug=addiction.slug) }}" class="story-form">
-        <div class="form-group">
-            <label for="title">Story Title</label>
-            <input type="text" id="title" name="title" required maxlength="200" placeholder="Give your story a title...">
+<section style="display:grid;grid-template-columns:1fr 320px;gap:var(--space-8);align-items:start;padding-top:var(--space-8)">
+    <form method="POST" action="{{ url_for('addictions.add_story', slug=addiction.slug) }}" style="display:grid;gap:var(--space-6)">
+        <div class="field">
+            <label>Story Title</label>
+            <input type="text" name="title" maxlength="200" placeholder="Give your story a title..." class="input" value="{{ request.form.title }}" required>
         </div>
-
-        <div class="form-group">
-            <label for="content">Your Story</label>
-            <textarea id="content" name="content" required rows="10" placeholder="Share your experience, challenges, progress, or advice..."></textarea>
+        <div class="field">
+            <label>Your Story</label>
+            <textarea name="content" rows="10" style="min-height:220px" placeholder="Share your experience, challenges, progress, or advice..." class="input" required>{{ request.form.content }}</textarea>
         </div>
-
-        <div class="form-group checkbox-group">
-            <label class="checkbox-label">
-                <input type="checkbox" name="anonymous" id="anonymous">
-                <span class="checkmark"></span>
-                Post anonymously (your name won't be shown)
-            </label>
-        </div>
-
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary btn-lg">Share My Story</button>
-            <a href="{{ url_for('addictions.stories', slug=addiction.slug) }}" class="btn btn-secondary">Cancel</a>
+        <label class="radio" style="cursor:pointer">
+            <input type="checkbox" name="anonymous" {% if request.form.anonymous %}checked{% endif %}>
+            <span class="dot"></span>
+            Post anonymously (your name won't be shown)
+        </label>
+        <div style="display:flex;gap:var(--space-3);border-top:1px solid var(--color-divider);padding-top:var(--space-6)">
+            <button type="submit" class="btn btn-primary blueprint ha" style="padding:var(--space-3) var(--space-6);font-size:15px">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                Share My Story
+            </button>
+            <a href="{{ url_for('addictions.stories', slug=addiction.slug) }}" class="btn btn-secondary hp" style="padding:var(--space-3) var(--space-6)">Cancel</a>
         </div>
     </form>
-
-    <div class="story-guidelines">
-        <h3>Sharing Guidelines</h3>
-        <ul>
-            <li>Be respectful and supportive of others</li>
-            <li>Focus on your personal experience and recovery journey</li>
-            <li>Avoid giving medical advice</li>
-            <li>Remember that this is a safe space for sharing</li>
-        </ul>
+    <div class="blueprint" style="padding:var(--space-6)">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="eyebrow klein">Sharing Guidelines</div>
+        <div style="display:grid;gap:var(--space-3);font-size:13px">
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)">Be respectful and supportive of others</div>
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)">Focus on your personal experience and recovery journey</div>
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)">Avoid giving medical advice</div>
+            <div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2)">Remember that this is a safe space for sharing</div>
+        </div>
     </div>
 </section>
 {% endblock %}

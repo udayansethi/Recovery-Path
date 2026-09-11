@@ -3,35 +3,52 @@
 {% block title %}Explore Topics - Recovery Path{% endblock %}
 
 {% block content %}
-<section class="page-header">
-    <h1>Explore Topics</h1>
-    <p>Select a topic to learn more and take the questionnaire for personalized guidance.</p>
+<section class="pagehead">
+    <div>
+        <div class="eyebrow">Index — Topics</div>
+        <h1>Explore Topics</h1>
+        <p class="pagehead-sub">Select a topic to learn more and take the questionnaire for personalized guidance.</p>
+    </div>
+    <div class="topic-count">{{ addictions|length }} shown</div>
 </section>
 
-<section class="search-section">
-    <form method="GET" action="{{ url_for('addictions.list_addictions') }}" class="search-form">
-        <input type="text" name="search" value="{{ search_query or '' }}" placeholder="Search topics..." class="search-input">
-        <select name="category" class="category-select">
-            <option value="">All categories</option>
-            {% for cat in categories %}
-                <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit" class="btn btn-primary">Search</button>
+<section class="search-bar">
+    <form method="GET" action="{{ url_for('addictions.list_addictions') }}" class="search-grid">
+        <div class="field">
+            <label>Search</label>
+            <input type="text" name="search" value="{{ search_query or '' }}" placeholder="Search topics..." class="input">
+        </div>
+        <div class="field">
+            <label>Category</label>
+            <select name="category" class="input">
+                <option value="">All categories</option>
+                {% for cat in categories %}
+                    <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary search-btn">Search</button>
     </form>
 </section>
 
-<section class="addictions-grid">
+<section class="topics-grid">
     {% for addiction in addictions %}
-        <a href="{{ url_for('addictions.detail', slug=addiction.slug) }}" class="addiction-card">
-            <div class="addiction-icon">{{ addiction.icon }}</div>
-            <span class="addiction-category">{{ addiction.category }}</span>
-            <h3>{{ addiction.name }}</h3>
-            <p>{{ addiction.description[:120] }}{% if addiction.description|length > 120 %}...{% endif %}</p>
-            <span class="card-link">Take questionnaire →</span>
+        {% set code = addiction.name[:2]|upper %}
+        <a href="{{ url_for('addictions.detail', slug=addiction.slug) }}" class="blueprint topic-card hp">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="topic-card-head">
+                <span class="topic-icon">{{ code }}</span>
+                <span class="topic-ref">{{ "%02d"|format(loop.index) }}</span>
+            </div>
+            <div>
+                <span class="tag tag-accent">{{ addiction.category }}</span>
+                <h3 class="topic-name">{{ addiction.name }}</h3>
+            </div>
+            <p class="topic-desc">{{ addiction.description[:120] }}{% if addiction.description|length > 120 %}...{% endif %}</p>
+            <div class="topic-cta">Take questionnaire →</div>
         </a>
     {% else %}
-        <p class="empty-state">No topics match your search. Try different keywords or categories.</p>
+        <p class="no-topics">No topics match your search. Try different keywords or categories.</p>
     {% endfor %}
 </section>
 {% endblock %}
