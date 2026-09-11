@@ -122,6 +122,15 @@ python run.py
 
 All code and architecture changes made to this repository are logged here in reverse chronological order.
 
+### [2026-09-12] — Fix Vercel Entrypoint and Serverless Database Configuration
+- **Configured Vercel WSGI Entrypoint:**
+  - Updated `pyproject.toml` to set `[tool.vercel] entrypoint = "run:app"`, complying with Vercel's required `module:object` entrypoint format.
+  - Exported top-level `app = create_app()` WSGI callable in `run.py` for Vercel Python serverless runtime.
+- **Serverless SQLite Path Compatibility:**
+  - Updated `config.py` to default SQLite database URI to `/tmp/addiction_support.db` when running under `VERCEL` environment, avoiding read-only filesystem errors.
+- **Environment-Aware Route Redirections:**
+  - Updated `app/routes/main.py` and `app/routes/addictions.py` to restrict `localhost:8080` redirects to local dev only, ensuring cloud/Vercel deployments serve routes directly.
+
 ### [2026-09-12] — Convert Frontend from Nested Submodule to Direct Repository Directory
 - **Direct Monorepo Frontend Integration:**
   - Removed nested `.git` and broken submodule gitlink reference from `motion-bloom-works`.

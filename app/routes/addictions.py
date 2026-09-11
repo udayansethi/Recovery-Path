@@ -1,3 +1,4 @@
+import os
 from flask import Blueprint, render_template, abort, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from app import db
@@ -8,9 +9,8 @@ addictions_bp = Blueprint("addictions", __name__)
 
 @addictions_bp.route("/")
 def list_addictions():
-    if not request.args.get("legacy"):
+    if not os.environ.get("VERCEL") and not request.args.get("legacy") and request.host.split(":")[0] in ("localhost", "127.0.0.1"):
         return redirect("http://localhost:8080/addictions")
-    from flask import request
 
     q = Addiction.query
     cat = request.args.get("category")

@@ -1,11 +1,22 @@
+import os
 from flask import Blueprint, render_template, request, redirect
 
 main_bp = Blueprint("main", __name__)
 
 
+def should_redirect_to_vite():
+    """Only redirect to Vite frontend if running in local development mode."""
+    if os.environ.get("VERCEL"):
+        return False
+    if request.args.get("legacy"):
+        return False
+    host = request.host.split(":")[0]
+    return host in ("localhost", "127.0.0.1")
+
+
 @main_bp.route("/")
 def home():
-    if not request.args.get("legacy"):
+    if should_redirect_to_vite():
         return redirect("http://localhost:8080/")
 
     from app.models import Addiction
@@ -27,13 +38,15 @@ def home():
 
 @main_bp.route("/dashboard")
 def dashboard():
-    if not request.args.get("legacy"):
+    if should_redirect_to_vite():
         return redirect("http://localhost:8080/dashboard")
 
     from app.models import UserResponse
     from flask_login import current_user
     if not current_user.is_authenticated:
-        return redirect("http://localhost:8080/dashboard")
+        if should_redirect_to_vite():
+            return redirect("http://localhost:8080/dashboard")
+        return redirect("/auth/login")
 
     responses = (
         UserResponse.query.filter_by(user_id=current_user.id)

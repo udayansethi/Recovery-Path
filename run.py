@@ -5,6 +5,10 @@ import signal
 import threading
 import subprocess
 import webbrowser
+from app import create_app
+
+# WSGI application instance for Vercel & production servers
+app = create_app()
 
 # Set up paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -31,10 +35,8 @@ def print_banner():
 def run_flask():
     """Runs the Flask API backend in a background thread."""
     try:
-        from app import create_app
-        flask_app = create_app()
         # Run Flask without Werkzeug reloader to prevent duplicate threads
-        flask_app.run(host="127.0.0.1", port=5000, debug=False, use_reloader=False)
+        app.run(host="127.0.0.1", port=5000, debug=False, use_reloader=False)
     except Exception as e:
         safe_print(f"[Flask Backend Error] {e}")
 
@@ -50,16 +52,12 @@ def main():
     # Check if user specifically requested flask only
     if "--flask-only" in sys.argv:
         safe_print("[Recovery Path] Starting Flask backend only on http://127.0.0.1:5000/...")
-        from app import create_app
-        app = create_app()
         app.run(debug=True, port=5000)
         return
 
     # Check that motion-bloom-works directory exists
     if not os.path.isdir(FRONTEND_DIR):
         safe_print(f"[Error] Frontend directory not found at {FRONTEND_DIR}")
-        from app import create_app
-        app = create_app()
         app.run(debug=True, port=5000)
         return
 

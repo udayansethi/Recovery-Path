@@ -6,9 +6,13 @@ load_dotenv()
 
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY") or "dev-secret-change-in-production"
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URL"
-    ) or "sqlite:///addiction_support.db"
+    
+    _default_sqlite = (
+        "sqlite:////tmp/addiction_support.db"
+        if os.environ.get("VERCEL")
+        else "sqlite:///addiction_support.db"
+    )
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL") or _default_sqlite
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # AI Configuration (Free Tiers: Google Gemini or Groq Cloud)

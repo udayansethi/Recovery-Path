@@ -1,5 +1,5 @@
 [tool.vercel]
-entrypoint = "app.py"
+entrypoint = "run:app"
 
 [build-system]
 requires = ["setuptools", "wheel"]
