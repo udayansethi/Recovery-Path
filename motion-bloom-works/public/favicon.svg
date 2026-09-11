@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="rp-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2dd4bf" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <linearGradient id="rp-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#062828" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Squircle Base -->
+  <rect width="64" height="64" rx="16" fill="url(#rp-bg)" />
+  <rect width="60" height="60" x="2" y="2" rx="14" fill="none" stroke="url(#rp-grad)" stroke-width="1.5" stroke-opacity="0.35" />
+
+  <!-- Outer Ring Dial -->
+  <circle cx="32" cy="32" r="21" stroke="url(#rp-grad)" stroke-width="2" stroke-dasharray="3 3.5" opacity="0.65" />
+
+  <!-- Cardinal Points -->
+  <circle cx="32" cy="13" r="2" fill="#2dd4bf" filter="url(#glow)" />
+  <circle cx="51" cy="32" r="1.5" fill="#2dd4bf" opacity="0.8" />
+  <circle cx="32" cy="51" r="1.5" fill="#2dd4bf" opacity="0.8" />
+  <circle cx="13" cy="32" r="1.5" fill="#2dd4bf" opacity="0.8" />
+
+  <!-- Compass Star Needles -->
+  <!-- North Needle (Bright Teal Gradient) -->
+  <polygon points="32,15 38,30 32,27" fill="#2dd4bf" filter="url(#glow)" />
+  <polygon points="32,15 26,30 32,27" fill="#0d9488" />
+
+  <!-- South Needle (Muted Slate Gradient) -->
+  <polygon points="32,49 38,34 32,37" fill="#64748b" opacity="0.75" />
+  <polygon points="32,49 26,34 32,37" fill="#475569" opacity="0.75" />
+
+  <!-- East/West Minor Needles -->
+  <polygon points="47,32 34,28 36,32 34,36" fill="#0284c7" opacity="0.7" />
+  <polygon points="17,32 30,28 28,32 30,36" fill="#0284c7" opacity="0.7" />
+
+  <!-- Center Pivot -->
+  <circle cx="32" cy="32" r="4" fill="#ffffff" filter="url(#glow)" />
+  <circle cx="32" cy="32" r="2" fill="#0f172a" />
+</svg>

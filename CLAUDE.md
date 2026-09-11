@@ -122,6 +122,13 @@ python run.py
 
 All code and architecture changes made to this repository are logged here in reverse chronological order.
 
+### [2026-09-12] — Convert Frontend from Nested Submodule to Direct Repository Directory
+- **Direct Monorepo Frontend Integration:**
+  - Removed nested `.git` and broken submodule gitlink reference from `motion-bloom-works`.
+  - Added full frontend codebase (87 source files, UI components, router, hooks, and static assets) directly into the main `Recovery-Path` Git repository.
+  - Updated root `.gitignore` to prevent any build artifacts (`node_modules`, `.output`, `.tanstack`, `.nitro`) from being tracked.
+  - Enabled cloning and deploying the full-stack application directly from `Recovery-Path` without external submodule dependencies.
+
 ### [2026-09-12] — Custom Recovery Path Favicons & Complete Brand Icon Replacement
 - **Replaced Default Favicon with Recovery Path Compass / Beacon Icon:**
   - Designed and generated crisp vector SVG favicon (`motion-bloom-works/public/favicon.svg`) with Recovery Path compass dial, cardinal indicators, glowing teal/cyan gradient needles, and dark navy base.

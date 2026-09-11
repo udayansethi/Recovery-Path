@@ -1,6 +1,23 @@
+# Python
 __pycache__/
 *.pyc
 .env
 instance/
 *.db
+.venv/
+venv/
 .claude/
+
+# Frontend
+node_modules/
+**/node_modules/
+.output/
+**/.output/
+dist/
+dist-ssr/
+.vinxi/
+.tanstack/
+.nitro/
+*.local
+.wrangler/
+.dev.vars
