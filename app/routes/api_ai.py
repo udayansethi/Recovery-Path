@@ -252,7 +252,9 @@ def story_takeaways():
         return jsonify(response)
     except Exception as e:
         logger.error(f"Error in story takeaways endpoint: {e}")
+        fallback_text = "### Key Strategies That Worked:\n• Taking recovery one hour at a time.\n• Building a support shield with friends."
         return jsonify({
-            "summary": "### Key Strategies That Worked:\n• Taking recovery one hour at a time.\n• Building a support shield with friends."
+            "takeaways": fallback_text,
+            "summary": fallback_text
         })
 

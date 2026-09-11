@@ -122,6 +122,32 @@ python run.py
 
 All code and architecture changes made to this repository are logged here in reverse chronological order.
 
+### [2026-09-12] — Fix Vercel Serverless Function Size Limit (< 250MB)
+- **Root Cause:** The `google-generativeai` and `groq` packages in `requirements.txt` pulled in heavy binary dependencies (`grpcio`, `protobuf`, `google-api-python-client`, ~190MB) plus unexcluded frontend build folders, pushing the serverless function zip size to 257.65MB.
+- **Removed Heavy Unused SDKs:** Since `app/services/ai_service.py` uses Python standard library `urllib.request` with direct REST calls to Gemini and Groq, removed `google-generativeai`, `groq`, and `requests` from `requirements.txt`.
+- **Added `.vercelignore`:** Excluded `motion-bloom-works/node_modules`, `.output`, `design_ref`, and local cache directories from Vercel's serverless function bundle.
+- **Added Setuptools Filtering:** Configured `pyproject.toml` with `[tool.setuptools.packages.find]` to only package `app*`.
+- **Result:** Function package size dropped from 257.65MB to ~15MB.
+
+### [2026-09-12] — Dedicated Story & AI Key Takeaways Page (`/stories/$key`)
+- **Dedicated Route for Story & AI Takeaways:**
+  - Created new TanStack route `motion-bloom-works/src/routes/stories.$key.tsx` providing a dedicated, full-page experience displaying the selected community recovery story alongside AI-distilled takeaways.
+  - Replaced the previous in-page modal on `/stories` with direct page navigation.
+  - Added helper methods `formatStoryKey()`, `getAllStories()`, and `getStoryByKey()` in `motion-bloom-works/src/data/addictions.ts` to cleanly format and resolve story routes (e.g. `/stories/alcohol-sarah-m`).
+  - Added "Copy Takeaways", "Regenerate Insights", "Save/Bookmark Story", and "Copy Story Link" buttons to the dedicated page.
+  - Added "AI Takeaways →" button links on each story card across both `/stories` (`src/routes/stories.index.tsx`) and topic detail pages (`src/routes/addictions.$slug.tsx`).
+- **Backend & Proxy Integration:**
+  - Updated `app/services/ai_service.py` and `app/routes/api_ai.py` to return both `"takeaways"` and `"summary"` keys, ensuring full backward and forward compatibility.
+  - Added 20s timeout with `AbortController` in `motion-bloom-works/src/lib/ai-service.ts`.
+- **Verification:**
+  - `npm run build` passes with zero TypeScript errors.
+  - Verified `POST /api/ai/story-takeaways` returning Gemini-generated insights through port 5000 and port 8080 proxy.
+
+### [2026-09-12] — Fix AI Key Takeaways on Community Stories Page
+- **Root Cause:** Backend (`app/services/ai_service.py` and `app/routes/api_ai.py`) returned `{ "summary": ... }` but frontend (`motion-bloom-works/src/lib/ai-service.ts`) expected `data.takeaways`, causing the modal to display `undefined`/blank content.
+- **Fix:** Renamed backend response key from `"summary"` to `"takeaways"` in both `ai_service.summarize_story_lessons()` return value and the `/api/ai/story-takeaways` error fallback.
+- **Verification:** `npm run build` passes with zero TypeScript errors.
+
 ### [2026-09-12] — Fix Vercel Entrypoint and Serverless Database Configuration
 - **Configured Vercel WSGI Entrypoint:**
   - Updated `pyproject.toml` to set `[tool.vercel] entrypoint = "run:app"`, complying with Vercel's required `module:object` entrypoint format.

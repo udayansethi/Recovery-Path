@@ -1,0 +1,23 @@
+# Frontend source and build artifacts
+motion-bloom-works/node_modules/
+motion-bloom-works/.output/
+motion-bloom-works/.tanstack/
+motion-bloom-works/.nitro/
+motion-bloom-works/dist/
+
+# Design reference files
+design_ref/
+design_source.html
+
+# Local Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.pyc
+instance/
+*.db
+
+# Dev tooling
+.claude/
+.github/
+.vscode/

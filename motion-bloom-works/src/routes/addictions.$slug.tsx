@@ -10,6 +10,7 @@ import {
   bandLabel,
   getAddiction,
   scoreBand,
+  formatStoryKey,
 } from "@/data/addictions";
 import { AnimatedNumber, Reveal, spring, snappySpring } from "@/lib/motion";
 import { useResults } from "@/lib/store";
@@ -365,16 +366,36 @@ function AddictionDetail() {
 
       {/* Stories */}
       <Reveal className="mt-14">
-        <h2 className="text-2xl font-semibold">Voices on {topic.name.toLowerCase()}</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-semibold">Voices on {topic.name.toLowerCase()}</h2>
+          <Button asChild variant="ghost" size="sm" className="text-xs">
+            <Link to="/stories">All community stories →</Link>
+          </Button>
+        </div>
         <div className="mt-5 grid gap-4 md:grid-cols-3">
-          {topic.stories.map((s) => (
-            <div key={s.author} className="glass-panel rounded-3xl p-6">
-              <p className="text-sm leading-relaxed text-muted-foreground">“{s.text}”</p>
-              <p className="mt-4 text-xs font-medium text-primary">
-                {s.author} · day {s.days}
-              </p>
-            </div>
-          ))}
+          {topic.stories.map((s) => {
+            const storyKey = formatStoryKey(topic.slug, s.author);
+            return (
+              <div key={s.author} className="glass-panel rounded-3xl p-6 flex flex-col justify-between">
+                <div>
+                  <p className="text-sm leading-relaxed text-muted-foreground">“{s.text}”</p>
+                  <p className="mt-4 text-xs font-medium text-primary">
+                    {s.author} · day {s.days}
+                  </p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-border/50 flex justify-end">
+                  <Link
+                    to="/stories/$key"
+                    params={{ key: storyKey }}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary hover:bg-primary/20 hover:text-primary-glow transition-all"
+                  >
+                    <Sparkles className="size-3" />
+                    <span>AI Takeaways →</span>
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </Reveal>
 

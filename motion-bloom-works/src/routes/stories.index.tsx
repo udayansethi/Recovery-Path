@@ -1,17 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { useMemo, useState } from "react";
-import { Bookmark, BookmarkCheck, Quote, Search, Sparkles, X, Loader2 } from "lucide-react";
+import { Bookmark, BookmarkCheck, Quote, Search, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { Page, SectionHeading } from "@/components/site/page";
-import { Button } from "@/components/ui/button";
-import { addictions, categories, type Category } from "@/data/addictions";
+import { categories, type Category, getAllStories } from "@/data/addictions";
 import { Reveal, TiltCard, spring } from "@/lib/motion";
 import { useBookmarks } from "@/lib/store";
-import { getStoryTakeaways } from "@/lib/ai-service";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/stories")({
+export const Route = createFileRoute("/stories/")({
   head: () => ({
     meta: [
       { title: "Recovery stories — real days, real change" },
@@ -38,25 +36,7 @@ function StoriesPage() {
   const [query, setQuery] = useState("");
   const { toggleBookmark, isBookmarked } = useBookmarks();
 
-  const [selectedStory, setSelectedStory] = useState<{ author: string; topic: string; text: string } | null>(null);
-  const [takeaways, setTakeaways] = useState<string | null>(null);
-  const [loadingTakeaways, setLoadingTakeaways] = useState(false);
-
-  const allStories = useMemo(
-    () =>
-      addictions
-        .flatMap((a) =>
-          a.stories.map((s) => ({
-            ...s,
-            key: `${a.slug}-${s.author}`,
-            topic: a.name,
-            slug: a.slug,
-            category: a.category,
-          })),
-        )
-        .sort((x, y) => y.days - x.days),
-    [],
-  );
+  const allStories = useMemo(() => getAllStories(), []);
 
   const stories = useMemo(() => {
     return allStories.filter((s) => {
@@ -73,23 +53,6 @@ function StoriesPage() {
       return true;
     });
   }, [allStories, active, query, isBookmarked]);
-
-  const handleFetchTakeaways = async (story: { author: string; topic: string; text: string }) => {
-    setSelectedStory(story);
-    setLoadingTakeaways(true);
-    setTakeaways(null);
-    try {
-      const res = await getStoryTakeaways({
-        story_content: story.text,
-        addiction_name: story.topic,
-      });
-      setTakeaways(res.takeaways);
-    } catch {
-      toast.error("Could not extract takeaways right now");
-    } finally {
-      setLoadingTakeaways(false);
-    }
-  };
 
   const filters: FilterType[] = ["All", ...categories, "Bookmarked"];
 
@@ -195,14 +158,14 @@ function StoriesPage() {
                       {s.topic} →
                     </Link>
 
-                    <button
-                      type="button"
-                      onClick={() => handleFetchTakeaways(s)}
-                      className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+                    <Link
+                      to="/stories/$key"
+                      params={{ key: s.key }}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/20 hover:text-primary-glow transition-all"
                     >
                       <Sparkles className="size-3 text-primary" />
-                      AI Key Takeaways
-                    </button>
+                      <span>AI Takeaways →</span>
+                    </Link>
                   </div>
                 </div>
               </TiltCard>
@@ -220,60 +183,6 @@ function StoriesPage() {
           </p>
         </div>
       )}
-
-      {/* AI Key Takeaways Modal */}
-      <AnimatePresence>
-        {selectedStory && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="glass-panel w-full max-w-lg rounded-3xl p-6 sm:p-8 border border-primary/30 shadow-2xl relative"
-            >
-              <button
-                onClick={() => setSelectedStory(null)}
-                className="absolute top-5 right-5 rounded-full p-2 text-muted-foreground hover:bg-secondary hover:text-foreground"
-              >
-                <X className="size-4" />
-              </button>
-
-              <div className="flex items-center gap-2.5">
-                <div className="grid size-8 place-items-center rounded-xl bg-primary/20 text-primary">
-                  <Sparkles className="size-4" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-semibold">AI Distilled Recovery Wisdom</h3>
-                  <p className="text-xs text-muted-foreground">From {selectedStory.author}'s journey with {selectedStory.topic}</p>
-                </div>
-              </div>
-
-              <div className="mt-4 rounded-xl bg-secondary/40 p-3.5 border border-border/40 text-xs italic text-muted-foreground">
-                “{selectedStory.text}”
-              </div>
-
-              <div className="mt-5">
-                {loadingTakeaways ? (
-                  <div className="py-8 text-center text-xs text-muted-foreground flex flex-col items-center gap-3">
-                    <Loader2 className="size-6 animate-spin text-primary" />
-                    <span>Distilling actionable recovery strategies...</span>
-                  </div>
-                ) : (
-                  <div className="prose-sm rounded-2xl bg-secondary/60 p-4 text-xs leading-relaxed text-foreground whitespace-pre-line border border-border/60">
-                    {takeaways}
-                  </div>
-                )}
-              </div>
-
-              <div className="mt-6 flex justify-end">
-                <Button variant="hero" size="sm" onClick={() => setSelectedStory(null)}>
-                  Close
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
 
       <Reveal className="mt-12">
         <div className="glass-panel rounded-3xl p-8 text-center">

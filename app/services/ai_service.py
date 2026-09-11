@@ -621,6 +621,7 @@ Keep total output under 120 words in clean Markdown.
             )
 
         return {
+            "takeaways": summary,
             "summary": summary
         }
 

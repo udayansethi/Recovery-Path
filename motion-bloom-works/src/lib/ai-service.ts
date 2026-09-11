@@ -272,14 +272,20 @@ export async function getStoryTakeaways(params: {
   addiction_name?: string;
 }): Promise<{ takeaways: string }> {
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 20000);
     const res = await fetch("/api/ai/story-takeaways", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(params),
+      signal: controller.signal,
     });
+    clearTimeout(timeoutId);
     if (res.ok) {
       const data = await res.json();
-      return { takeaways: data.takeaways };
+      if (data && (data.takeaways || data.summary)) {
+        return { takeaways: data.takeaways || data.summary };
+      }
     }
   } catch (err) {
     console.warn("AI story takeaways fallback:", err);

@@ -541,3 +541,55 @@ export const bandLabel = {
   medium: "Worth Attention (13–24)",
   high: "High Concern (25–40)",
 } as const;
+
+export type EnrichedStory = Story & {
+  key: string;
+  topic: string;
+  slug: string;
+  category: Category;
+};
+
+export const formatStoryKey = (slug: string, author: string): string => {
+  const cleanAuthor = author
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return `${slug}-${cleanAuthor}`;
+};
+
+export const getAllStories = (): EnrichedStory[] =>
+  addictions
+    .flatMap((a) =>
+      a.stories.map((s) => ({
+        ...s,
+        key: formatStoryKey(a.slug, s.author),
+        topic: a.name,
+        slug: a.slug,
+        category: a.category,
+      })),
+    )
+    .sort((x, y) => y.days - x.days);
+
+export const getStoryByKey = (key: string): EnrichedStory | undefined => {
+  if (!key) return undefined;
+  const all = getAllStories();
+  const clean = decodeURIComponent(key).toLowerCase().trim();
+  const normalized = clean.replace(/[^a-z0-9]/g, "");
+
+  // 1. Exact key match
+  const exact = all.find((s) => s.key === clean);
+  if (exact) return exact;
+
+  // 2. Normalized match (ignoring special chars and punctuation)
+  const normMatch = all.find((s) => s.key.replace(/[^a-z0-9]/g, "") === normalized);
+  if (normMatch) return normMatch;
+
+  // 3. Fallback: match by matching slug prefix and author name components
+  return all.find((s) => {
+    const slugMatch = clean.startsWith(s.slug.toLowerCase());
+    const authorWords = s.author.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/);
+    const authorMatch = authorWords.some((w) => w.length > 2 && clean.includes(w));
+    return slugMatch && authorMatch;
+  });
+};
+

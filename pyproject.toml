@@ -1,6 +1,10 @@
 [tool.vercel]
 entrypoint = "run:app"
 
+[tool.setuptools.packages.find]
+include = ["app*"]
+exclude = ["motion-bloom-works*", "design_ref*", "instance*"]
+
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
