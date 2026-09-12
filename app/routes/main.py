@@ -54,3 +54,13 @@ def dashboard():
         .all()
     )
     return render_template("dashboard.html", responses=responses)
+
+
+@main_bp.route("/stories")
+@main_bp.route("/stories/<path:subpath>")
+def stories(subpath=None):
+    if should_redirect_to_vite():
+        target = f"http://localhost:8080/stories/{subpath}" if subpath else "http://localhost:8080/stories"
+        return redirect(target)
+    return redirect("/addictions")
+

@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as StoriesRouteImport } from './routes/stories'
 import { Route as AddictionsIndexRouteImport } from './routes/addictions.index'
 import { Route as AddictionsSlugRouteImport } from './routes/addictions.$slug'
 import { Route as StoriesIndexRouteImport } from './routes/stories.index'
@@ -24,6 +25,11 @@ const IndexRoute = IndexRouteImport.update({
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoriesRoute = StoriesRouteImport.update({
+  id: '/stories',
+  path: '/stories',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AddictionsIndexRoute = AddictionsIndexRouteImport.update({
@@ -50,6 +56,7 @@ const StoriesKeyRoute = StoriesKeyRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/stories': typeof StoriesRouteWithChildren
   '/addictions/$slug': typeof AddictionsSlugRoute
   '/stories/$key': typeof StoriesKeyRoute
   '/addictions/': typeof AddictionsIndexRoute
@@ -67,6 +74,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/stories': typeof StoriesRouteWithChildren
   '/addictions/$slug': typeof AddictionsSlugRoute
   '/stories/$key': typeof StoriesKeyRoute
   '/addictions/': typeof AddictionsIndexRoute
@@ -77,6 +85,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/stories'
     | '/addictions/$slug'
     | '/stories/$key'
     | '/addictions/'
@@ -93,6 +102,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/stories'
     | '/addictions/$slug'
     | '/stories/$key'
     | '/addictions/'
@@ -102,6 +112,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
+  StoriesRoute: typeof StoriesRouteWithChildren
   AddictionsSlugRoute: typeof AddictionsSlugRoute
   AddictionsIndexRoute: typeof AddictionsIndexRoute
 }
@@ -120,6 +131,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/stories': {
+      id: '/stories'
+      path: '/stories'
+      fullPath: '/stories'
+      preLoaderRoute: typeof StoriesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/addictions/': {
@@ -153,9 +171,23 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface StoriesRouteChildren {
+  StoriesKeyRoute: typeof StoriesKeyRoute
+  StoriesIndexRoute: typeof StoriesIndexRoute
+}
+
+const StoriesRouteChildren: StoriesRouteChildren = {
+  StoriesKeyRoute: StoriesKeyRoute,
+  StoriesIndexRoute: StoriesIndexRoute,
+}
+
+const StoriesRouteWithChildren =
+  StoriesRoute._addFileChildren(StoriesRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
+  StoriesRoute: StoriesRouteWithChildren,
   AddictionsSlugRoute: AddictionsSlugRoute,
   AddictionsIndexRoute: AddictionsIndexRoute,
 }

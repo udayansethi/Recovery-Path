@@ -122,6 +122,17 @@ python run.py
 
 All code and architecture changes made to this repository are logged here in reverse chronological order.
 
+### [2026-09-12] — Fix 404 Page Not Found on Stories Landing Page (`/stories`)
+- **Root Cause:**
+  - TanStack Router's file watcher expected a layout route `src/routes/stories.tsx` when sub-routes `stories.index.tsx` and `stories.$key.tsx` existed. Without `src/routes/stories.tsx`, TanStack Router generated `StoriesRoute` references without defining the parent route or registering it in `rootRouteChildren`, causing `/stories` and `/stories/$key` to trigger the 404 Page Not Found error component.
+  - Flask backend lacked a redirect handler for `/stories` and `/stories/<path:subpath>` in `app/routes/main.py`.
+- **Fix:**
+  - Created `motion-bloom-works/src/routes/stories.tsx` with `<Outlet />` layout route, enabling TanStack Router to automatically generate the proper nested route tree (`StoriesRoute` -> `StoriesIndexRoute` and `StoriesKeyRoute`).
+  - Added `@main_bp.route("/stories")` and `@main_bp.route("/stories/<path:subpath>")` in `app/routes/main.py` ensuring requests to `/stories` on the Flask port redirect to `http://localhost:8080/stories`.
+- **Verification:**
+  - Ran `npm run build` with zero TypeScript or bundling errors.
+  - Verified live render of `http://localhost:8080/stories` and `http://localhost:8080/stories/alcohol-sarah-m` returning HTTP 200 and rendering story cards, categories, and AI takeaways.
+
 ### [2026-09-12] — Fix Vercel Serverless Function Size Limit (< 250MB)
 - **Root Cause:** The `google-generativeai` and `groq` packages in `requirements.txt` pulled in heavy binary dependencies (`grpcio`, `protobuf`, `google-api-python-client`, ~190MB) plus unexcluded frontend build folders, pushing the serverless function zip size to 257.65MB.
 - **Removed Heavy Unused SDKs:** Since `app/services/ai_service.py` uses Python standard library `urllib.request` with direct REST calls to Gemini and Groq, removed `google-generativeai`, `groq`, and `requests` from `requirements.txt`.
